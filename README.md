@@ -19,3 +19,5 @@ const sound = new Howl({
 })
 ```
 I was getting a typescript error for the import, saying that the exampleSound.wav module could not be found. I had to add a global.d.ts file with a '*.[file-extension]' for any audio files I wanted to import to different files.
+
+## Typescript
