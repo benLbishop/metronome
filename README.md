@@ -1,5 +1,7 @@
 # Setup changes
 
+This file will outline the changes/installs made to get the project working.
+
 ## Howler
 
 At first, I was trying to use 
