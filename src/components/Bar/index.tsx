@@ -13,15 +13,11 @@ interface Props {
 }
 
 // TODO: convert to functional component
-class Bar extends React.PureComponent<Props> {
-  render() {
-    return (
-      <div className='bar'>
-        <BarField value={this.props.beats} updateValue={this.props.updateBeats}/>
-        <BarField value={this.props.noteValue} updateValue={this.props.updateNoteValue}/>
-      </div>
-    );
-  }
-}
+const Bar: React.FC<Props> = (props: Props) => (
+  <div className='bar'>
+    <BarField value={props.beats} updateValue={props.updateBeats}/>
+    <BarField value={props.noteValue} updateValue={props.updateNoteValue}/>
+  </div>
+);
 
 export default Bar;

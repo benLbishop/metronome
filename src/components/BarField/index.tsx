@@ -28,6 +28,7 @@ const BarField: React.FC<Props> = (props: Props) => {
   };
 
   const onBlur = () => {
+    setTempValue(props.value);
     setIsFocused(false);
   };
 

@@ -85,7 +85,7 @@ const makeJolt2 = (): BarData[] => {
     });
   }
   return data;
-}
+};
 
 class Metronome extends React.PureComponent<Props, State> {
   constructor(props: Props) {
