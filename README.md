@@ -21,3 +21,7 @@ const sound = new Howl({
 I was getting a typescript error for the import, saying that the exampleSound.wav module could not be found. I had to add a global.d.ts file with a '*.[file-extension]' for any audio files I wanted to import to different files.
 
 ## Typescript
+
+What the heck is going on with the index.ts in my types directory? If I have more than 2 interfaces/enums that I'm exporting, it yells and says that there's a parse error: cannot read property 'name' of undefined.
+
+Ok....now it's yelling at me even though I deleted the file. I no longer know what's happening. Maybe the filename of `/src/types/index.ts` is reserved by react projects for something?
