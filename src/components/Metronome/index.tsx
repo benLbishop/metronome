@@ -12,7 +12,7 @@ interface Props {}
 interface State {
   bars: BarData[];
   bpm: number;
-  curMeasure: number;
+  curBar: number;
   curBeat: number;
   playing: boolean;
   timeout?: NodeJS.Timeout;
@@ -42,16 +42,38 @@ const highSound = new Howl({
   volume: 1
 });
 
+// TODO: remove
+const makeJolt = (): BarData[] => {
+  const data: BarData[] = [];
+  for (let i = 0; i < 12; i++) {
+    const id = i;
+    let beats: number;
+    if (i < 5) {
+      beats = 5;
+    } else if (i === 8) {
+      beats = 5;
+    } else {
+      beats = 6;
+    }
+    data.push({
+      id,
+      beats,
+      noteValue: NoteValue.QUARTER
+    });
+  }
+  return data;
+};
+
 class Metronome extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
     this.state = {
-      bars: [DEFAULT_BAR_DATA],
-      bpm: 120,
+      bars: makeJolt(),
+      bpm: 330,
       playing: false,
-      curBeat: 1,
-      curMeasure: 1
+      curBeat: 0,
+      curBar: 0
     };
   }
 
@@ -79,27 +101,34 @@ class Metronome extends React.PureComponent<Props, State> {
     });
   }
 
+  updateBeat = () => {
+    // 1. take curBeat and find current measure
+    const { curBeat, curBar, bars } = this.state;
+    let newBeat = curBeat + 1;
+    let newBar = curBar;
+    if (newBeat >= bars[curBar].beats) {
+      newBeat = 0;
+      newBar = (curBar + 1) % bars.length;
+    }
+    this.setState({
+      curBar: newBar,
+      curBeat: newBeat
+    });
+  }
+
   playSound = () => {
-    if (this.state.curBeat === 1) {
+    if (this.state.curBeat === 0) {
       highSound.play();
     } else {
       lowSound.play();
     }
     const beatTime = 1000 * 60 / this.state.bpm;
-    // TODO: rework logic for this
-    let newBeat = ((this.state.curBeat + 1) % (this.state.bars[0].beats + 1));
-    let newMeasure = this.state.curMeasure;
-    if (newBeat === 0) {
-      newBeat = 1;
-      newMeasure += 1;
-    }
+    this.updateBeat();
     const timeout = setTimeout(() => {
       this.playSound();
     }, beatTime);
     this.setState({
-      timeout,
-      curBeat: newBeat,
-      curMeasure: newMeasure
+      timeout
     });
   }
 
@@ -111,8 +140,8 @@ class Metronome extends React.PureComponent<Props, State> {
     clearTimeout(timeout);
     this.setState({
       timeout: undefined,
-      curBeat: 1,
-      curMeasure: 1
+      curBeat: 0,
+      curBar: 0
     });
   }
 
@@ -157,10 +186,10 @@ class Metronome extends React.PureComponent<Props, State> {
   }
   render() {
     return (
-      <div className='metronome'>
-        {this.getBars()}
+      <div id='metronome'>
+        <button onMouseDown={this.toggleSoundInterval}>{this.state.playing ? 'stop' : 'start'}</button>
         <input type='text' value={this.state.bpm} onChange={this.handleBPMChange}/>
-        <button onMouseDown={this.toggleSoundInterval}>Sound Test</button>
+        {this.getBars()}
       </div>
     );
   }

@@ -56,7 +56,6 @@ const BarField: React.FC<Props> = (props: Props) => {
 
   return (
     <div className='barField'>
-      <p>Beats</p>
       <input
         type='text'
         value={getDisplayValue()}
