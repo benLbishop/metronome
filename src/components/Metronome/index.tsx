@@ -64,12 +64,35 @@ const makeJolt = (): BarData[] => {
   return data;
 };
 
+const makeJolt2 = (): BarData[] => {
+  const data: BarData[] = [];
+  for (let i = 0; i < 8; i++) {
+    const id = i;
+    let beats: number;
+    if (i === 0 || i === 4) {
+      beats = 7;
+    } else if (i === 1 || i === 5) {
+      beats = 8;
+    } else if (i === 3) {
+      beats = 10;
+    } else {
+      beats = 6;
+    }
+    data.push({
+      id,
+      beats,
+      noteValue: NoteValue.QUARTER
+    });
+  }
+  return data;
+}
+
 class Metronome extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
     this.state = {
-      bars: makeJolt(),
+      bars: makeJolt2(),
       bpm: 330,
       playing: false,
       curBeat: 0,
