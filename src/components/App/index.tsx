@@ -5,7 +5,7 @@ import SoundTest from '../SoundTest';
 
 function App() {
   return (
-    <div id="appInitialized">
+    <div id='appInitialized'>
       <SoundTest />
     </div>
   );
