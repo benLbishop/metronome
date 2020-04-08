@@ -1,14 +1,13 @@
 import React from 'react';
-import logo from '../../res/images/logo.svg';
 import './App.scss';
-import SoundTest from '../SoundTest';
+import Metronome from '../Metronome';
 
-function App() {
+const App: React.FC = () => {
   return (
     <div id='appInitialized'>
-      <SoundTest />
+      <Metronome />
     </div>
   );
-}
+};
 
 export default App;
