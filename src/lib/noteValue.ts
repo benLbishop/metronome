@@ -34,7 +34,7 @@ export const convertIntToNoteValue = (num: number): NoteValue => {
     if (num === 4) {
         return NoteValue.QUARTER;
     }
-    if (num === 18) {
+    if (num === 8) {
         return NoteValue.EIGHTH;
     }
     if (num === 16) {
