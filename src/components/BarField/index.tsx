@@ -56,8 +56,8 @@ const BarField: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <div className='barField'>
       <input
+        className='barField'
         type='text'
         value={getDisplayValue()}
         onChange={handleTextChange}
@@ -65,7 +65,6 @@ const BarField: React.FC<Props> = (props: Props) => {
         onBlur={onBlur}
         onKeyPress={handleKeyPress}
       />
-    </div>
   );
 };
 

@@ -6,6 +6,8 @@ import './Metronome.scss';
 import { BarData, NoteValue } from '../../types/barTypes';
 import { convertNoteValueToInt, convertIntToNoteValue } from '../../lib/noteValue';
 import Bar from '../Bar';
+import { makeJolt } from '../../config/songs';
+import SettingsBar from '../SettingsBar';
 
 interface Props {}
 
@@ -16,6 +18,7 @@ interface State {
   curBeat: number;
   playing: boolean;
   timeout?: NodeJS.Timeout;
+  nextBarId: number;
 }
 
 // TODO: move to constants
@@ -42,63 +45,17 @@ const highSound = new Howl({
   volume: 1
 });
 
-// TODO: remove
-const makeJolt = (): BarData[] => {
-  const data: BarData[] = [];
-  for (let i = 0; i < 12; i++) {
-    const id = i;
-    let beats: number;
-    if (i < 5) {
-      beats = 5;
-    } else if (i === 8) {
-      beats = 5;
-    } else {
-      beats = 6;
-    }
-    data.push({
-      id,
-      beats,
-      noteValue: NoteValue.QUARTER
-    });
-  }
-  return data;
-};
-
-const makeJolt2 = (): BarData[] => {
-  const data: BarData[] = [];
-  for (let i = 0; i < 8; i++) {
-    const id = i;
-    let beats: number;
-    let noteValue: NoteValue = NoteValue.SIXTEENTH;
-    if (i === 0 || i === 4) {
-      beats = 7;
-    } else if (i === 1 || i === 5) {
-      beats = 8;
-    } else if (i === 3) {
-      beats = 5;
-      noteValue = NoteValue.EIGHTH;
-    } else {
-      beats = 6;
-    }
-    data.push({
-      id,
-      beats,
-      noteValue
-    });
-  }
-  return data;
-};
-
 class Metronome extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
     this.state = {
-      bars: makeJolt2(),
-      bpm: 330,
+      bars: [DEFAULT_BAR_DATA, {...DEFAULT_BAR_DATA, id: 1}],
+      bpm: 120,
       playing: false,
       curBeat: 0,
-      curBar: 0
+      curBar: 0,
+      nextBarId: 2
     };
   }
 
@@ -175,7 +132,7 @@ class Metronome extends React.PureComponent<Props, State> {
     playing: !state.playing
   });
 
-  toggleSoundInterval = () => {
+  togglePlay = () => {
     if (this.state.playing) {
       this.stopSound();
     } else {
@@ -184,12 +141,7 @@ class Metronome extends React.PureComponent<Props, State> {
     this.setState(this.toggleStatePlaying);
   }
 
-  handleBPMChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newText = e.target.value;
-    const newBPM = parseInt(newText, 10);
-    if (isNaN(newBPM)) {
-      return;
-    }
+  handleBPMChange = (newBPM: number) => {
     this.setState({
       bpm: newBPM
     });
@@ -212,13 +164,24 @@ class Metronome extends React.PureComponent<Props, State> {
   }
 
   addBar = () => {
-    const newBars = this.state.bars.slice();
-    this.setState({
-      bars: [...newBars, DEFAULT_BAR_DATA]
-    });
+    const barAdder = (state: State, _props: Props): State => {
+      const newBars = state.bars.slice();
+      const newBar = {
+        ...DEFAULT_BAR_DATA,
+        id: state.nextBarId
+      };
+      newBars.push(newBar);
+      return {
+        ...state,
+        bars: newBars,
+        nextBarId: state.nextBarId + 1
+      };
+    };
+    this.setState(barAdder);
   }
 
   removeBar = (idx: number) => {
+    // TODO: this is goobed up because of idx/id issue
     const newBars = this.state.bars.slice();
     newBars.map(bar => {
       if (bar.id <= idx) {
@@ -235,10 +198,16 @@ class Metronome extends React.PureComponent<Props, State> {
   render() {
     return (
       <div id='metronome'>
-        <button onMouseDown={this.toggleSoundInterval}>{this.state.playing ? 'stop' : 'start'}</button>
+        <SettingsBar
+          bpm={this.state.bpm}
+          playing={this.state.playing}
+          togglePlay={this.togglePlay}
+          updateBPM={this.handleBPMChange}
+        />
         <button onClick={this.addBar}>Add Bar</button>
-        <input type='text' value={this.state.bpm} onChange={this.handleBPMChange}/>
-        {this.getBars()}
+        <div className='barContainer'>
+          {this.getBars()}
+        </div>
       </div>
     );
   }

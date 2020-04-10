@@ -1,0 +1,22 @@
+.settingsBar {
+    display: flex;
+    // flex: 1;
+    flex-direction: row;
+    background-color: blue;
+    justify-content: flex-end;
+    align-items: stretch;
+}
+
+.playButton {
+    // width: 5ex;
+    // height: 10ex;
+    justify-content: center;
+}
+
+.stdP {
+    // width: 4ex;
+    // height: 8ex;
+    // margin: 2ex 0;
+    background-color: green;
+    justify-content: center;
+}
