@@ -69,19 +69,21 @@ const makeJolt2 = (): BarData[] => {
   for (let i = 0; i < 8; i++) {
     const id = i;
     let beats: number;
+    let noteValue: NoteValue = NoteValue.SIXTEENTH;
     if (i === 0 || i === 4) {
       beats = 7;
     } else if (i === 1 || i === 5) {
       beats = 8;
     } else if (i === 3) {
-      beats = 10;
+      beats = 5;
+      noteValue = NoteValue.EIGHTH;
     } else {
       beats = 6;
     }
     data.push({
       id,
       beats,
-      noteValue: NoteValue.QUARTER
+      noteValue
     });
   }
   return data;
@@ -203,14 +205,38 @@ class Metronome extends React.PureComponent<Props, State> {
         noteValue={noteValueInt}
         updateBeats={(beats: number) => this.updateBeats(bar.id, beats)}
         updateNoteValue={(noteInt: number) => this.updateNoteValue(bar.id, noteInt)}
+        remove={() => this.removeBar(bar.id)}
       />;
     });
     return bars;
   }
+
+  addBar = () => {
+    const newBars = this.state.bars.slice();
+    this.setState({
+      bars: [...newBars, DEFAULT_BAR_DATA]
+    });
+  }
+
+  removeBar = (idx: number) => {
+    const newBars = this.state.bars.slice();
+    newBars.map(bar => {
+      if (bar.id <= idx) {
+        return;
+      }
+      bar.id -= 1;
+    });
+    newBars.splice(idx, 1);
+    this.setState({
+      bars: newBars
+    });
+  }
+
   render() {
     return (
       <div id='metronome'>
         <button onMouseDown={this.toggleSoundInterval}>{this.state.playing ? 'stop' : 'start'}</button>
+        <button onClick={this.addBar}>Add Bar</button>
         <input type='text' value={this.state.bpm} onChange={this.handleBPMChange}/>
         {this.getBars()}
       </div>
