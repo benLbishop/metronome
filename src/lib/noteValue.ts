@@ -14,6 +14,9 @@ export const convertNoteValueToInt = (value: NoteValue): number => {
         case NoteValue.EIGHTH: {
             return 8;
         }
+        case NoteValue.DOTTED_EIGHTH: {
+            return 6;
+        }
         case NoteValue.SIXTEENTH: {
             return 16;
         }
@@ -39,6 +42,9 @@ export const convertIntToNoteValue = (num: number): NoteValue => {
     }
     if (num === 16) {
         return NoteValue.SIXTEENTH;
+    }
+    if (num === 12) {
+        return NoteValue.DOTTED_EIGHTH;
     }
     // TODO
     return NoteValue.QUARTER;

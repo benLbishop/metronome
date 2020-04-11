@@ -1,4 +1,4 @@
-import { BarData, NoteValue } from '../types/barTypes';
+import { BarData, NoteValue, GroupData } from '../types/barTypes';
 
 export const makeJolt = (): BarData[] => {
     const data: BarData[] = [];
@@ -42,4 +42,25 @@ const makeJolt2 = (): BarData[] => {
         });
     }
     return data;
+};
+
+export const makeElectricSunrise = (): BarData[] => {
+    const groupings: GroupData[] = [];
+    groupings.push({
+        beats: 8,
+        noteValue: NoteValue.DOTTED_EIGHTH
+        // subdivision: 3
+    });
+    groupings.push({
+        beats: 1,
+        noteValue: NoteValue.EIGHTH,
+        subdivision: 2
+    });
+    const bar: BarData = {
+        groupings,
+        position: 0,
+        noteValue: NoteValue.EIGHTH,
+        beats: 13
+    };
+    return [bar];
 };
