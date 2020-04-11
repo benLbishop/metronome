@@ -2,6 +2,7 @@ import React from 'react';
 import { Howl } from 'howler';
 import highClick from '../../res/sounds/highclick.wav';
 import lowClick from '../../res/sounds/lowclick.wav';
+import subdivClick from '../../res/sounds/subdiv.wav';
 import './Metronome.scss';
 import { BarData, NoteValue, Tempo } from '../../types/barTypes';
 import { convertNoteValueToInt, convertIntToNoteValue } from '../../lib/noteValue';
@@ -30,7 +31,7 @@ const DEFAULT_BAR_DATA: BarData = {
 };
 
 // TODO: idk where these go
-const lowSound = new Howl({
+const unemphasizedSound = new Howl({
   src: [lowClick],
   onloaderror: (id, err) => {
     console.log('HOWL err: ', id, err);
@@ -38,8 +39,16 @@ const lowSound = new Howl({
   volume: 1
 });
 
-const highSound = new Howl({
+const emphasizedSound = new Howl({
   src: [highClick],
+  onloaderror: (id, err) => {
+    console.log('HOWL err: ', id, err);
+  },
+  volume: 1
+});
+
+const subdivSound = new Howl({
+  src: [subdivClick],
   onloaderror: (id, err) => {
     console.log('HOWL err: ', id, err);
   },
@@ -51,7 +60,7 @@ class Metronome extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      bars: [DEFAULT_BAR_DATA, {...DEFAULT_BAR_DATA, position: 1}],
+      bars: [{...DEFAULT_BAR_DATA, subdivision: 2}, {...DEFAULT_BAR_DATA, position: 1, subdivision: 3}],
       tempo: {
         bpm: 120,
         noteValue: NoteValue.QUARTER
@@ -107,7 +116,12 @@ class Metronome extends React.Component<Props, State> {
     const { curBeat, curBarIdx, bars } = this.state;
     let newBeat = curBeat + 1;
     let newBarIdx = curBarIdx;
-    if (newBeat >= bars[curBarIdx].beats) {
+    const curBar = bars[curBarIdx];
+
+    const maxBeats = curBar.subdivision
+      ? curBar.beats * curBar.subdivision
+      : curBar.beats;
+    if (newBeat >= maxBeats) {
       newBeat = 0;
       newBarIdx = (curBarIdx + 1) % bars.length;
     }
@@ -118,15 +132,19 @@ class Metronome extends React.Component<Props, State> {
   }
 
   playSound = () => {
-    if (this.state.curBeat === 0) {
-      highSound.play();
+    const { tempo, curBarIdx, curBeat } = this.state;
+    const curBar = this.state.bars[curBarIdx];
+    if (curBeat === 0) {
+      emphasizedSound.play();
+    } else if (curBar.subdivision && curBeat % curBar.subdivision !== 0) {
+      subdivSound.play();
     } else {
-      lowSound.play();
+      unemphasizedSound.play();
     }
 
-    const { tempo, curBarIdx } = this.state;
-    const curBar = this.state.bars[curBarIdx];
-    const beatDelaySecs = (60 / tempo.bpm) * (convertNoteValueToInt(tempo.noteValue) / convertNoteValueToInt(curBar.noteValue));
+    const noteValueRatio = convertNoteValueToInt(curBar.noteValue) / convertNoteValueToInt(tempo.noteValue);
+    const subdivisionMultiplier = curBar.subdivision ? curBar.subdivision : 1;
+    const beatDelaySecs = (60 / tempo.bpm) / (noteValueRatio * subdivisionMultiplier);
     this.updateBeat();
     const timeout = setTimeout(() => {
       this.playSound();

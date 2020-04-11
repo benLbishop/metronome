@@ -4,6 +4,7 @@ import BarField from '../BarField';
 import './SettingsBar.scss';
 import { Tempo } from '../../types/barTypes';
 
+// TODO: make tempo noteValue modifiable
 interface Props {
     tempo: Tempo;
     playing: boolean;

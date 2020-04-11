@@ -6,10 +6,15 @@ export enum NoteValue {
     SIXTEENTH = 'SIXTEENTH'
 }
 
+// export enum Subdivision {
+
+// }
+
 export interface BarData {
     position: number;
     beats: number;
     noteValue: NoteValue;
+    subdivision?: number;
 }
 
 export interface Tempo {
