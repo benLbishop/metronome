@@ -3,18 +3,19 @@ import { Howl } from 'howler';
 import highClick from '../../res/sounds/highclick.wav';
 import lowClick from '../../res/sounds/lowclick.wav';
 import './Metronome.scss';
-import { BarData, NoteValue } from '../../types/barTypes';
+import { BarData, NoteValue, Tempo } from '../../types/barTypes';
 import { convertNoteValueToInt, convertIntToNoteValue } from '../../lib/noteValue';
 import Bar from '../Bar';
 import { makeJolt } from '../../config/songs';
 import SettingsBar from '../SettingsBar';
+import { barsHaveChanged } from '../../lib/bars';
 
 interface Props {}
 
 interface State {
   bars: BarData[];
-  bpm: number;
-  curBar: number;
+  tempo: Tempo;
+  curBarIdx: number;
   curBeat: number;
   playing: boolean;
   timeout?: NodeJS.Timeout;
@@ -23,7 +24,7 @@ interface State {
 
 // TODO: move to constants
 const DEFAULT_BAR_DATA: BarData = {
-  id: 0,
+  position: 0,
   beats: 4,
   noteValue: NoteValue.QUARTER
 };
@@ -45,18 +46,36 @@ const highSound = new Howl({
   volume: 1
 });
 
-class Metronome extends React.PureComponent<Props, State> {
+class Metronome extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
     this.state = {
-      bars: [DEFAULT_BAR_DATA, {...DEFAULT_BAR_DATA, id: 1}],
-      bpm: 120,
+      bars: [DEFAULT_BAR_DATA, {...DEFAULT_BAR_DATA, position: 1}],
+      tempo: {
+        bpm: 120,
+        noteValue: NoteValue.QUARTER
+      },
       playing: false,
       curBeat: 0,
-      curBar: 0,
+      curBarIdx: 0,
       nextBarId: 2
     };
+  }
+
+  // TODO: move state out of this component (at least bars, curBeat, and curBarIdx) so I don't have to use shouldComponentUpdate
+  shouldComponentUpdate(_nextProps: Readonly<Props>, nextState: Readonly<State>, nextContext: any): boolean {
+    const { playing, tempo, bars } = this.state;
+    if (playing !== nextState.playing) {
+      return true;
+    }
+    if (tempo.bpm !== nextState.tempo.bpm || tempo.noteValue !== nextState.tempo.noteValue) {
+      return true;
+    }
+    if (barsHaveChanged(bars, nextState.bars)) {
+      return true;
+    }
+    return false;
   }
 
   // TODO: sort out id/idx thing for bars
@@ -85,15 +104,15 @@ class Metronome extends React.PureComponent<Props, State> {
 
   updateBeat = () => {
     // 1. take curBeat and find current measure
-    const { curBeat, curBar, bars } = this.state;
+    const { curBeat, curBarIdx, bars } = this.state;
     let newBeat = curBeat + 1;
-    let newBar = curBar;
-    if (newBeat >= bars[curBar].beats) {
+    let newBarIdx = curBarIdx;
+    if (newBeat >= bars[curBarIdx].beats) {
       newBeat = 0;
-      newBar = (curBar + 1) % bars.length;
+      newBarIdx = (curBarIdx + 1) % bars.length;
     }
     this.setState({
-      curBar: newBar,
+      curBarIdx: newBarIdx,
       curBeat: newBeat
     });
   }
@@ -104,11 +123,14 @@ class Metronome extends React.PureComponent<Props, State> {
     } else {
       lowSound.play();
     }
-    const beatTime = 1000 * 60 / this.state.bpm;
+
+    const { tempo, curBarIdx } = this.state;
+    const curBar = this.state.bars[curBarIdx];
+    const beatDelaySecs = (60 / tempo.bpm) * (convertNoteValueToInt(tempo.noteValue) / convertNoteValueToInt(curBar.noteValue));
     this.updateBeat();
     const timeout = setTimeout(() => {
       this.playSound();
-    }, beatTime);
+    }, beatDelaySecs * 1000);
     this.setState({
       timeout
     });
@@ -123,7 +145,7 @@ class Metronome extends React.PureComponent<Props, State> {
     this.setState({
       timeout: undefined,
       curBeat: 0,
-      curBar: 0
+      curBarIdx: 0
     });
   }
 
@@ -143,7 +165,10 @@ class Metronome extends React.PureComponent<Props, State> {
 
   handleBPMChange = (newBPM: number) => {
     this.setState({
-      bpm: newBPM
+      tempo: {
+        ...this.state.tempo,
+        bpm: newBPM
+      }
     });
   }
 
@@ -151,13 +176,12 @@ class Metronome extends React.PureComponent<Props, State> {
     const bars: JSX.Element[] = this.state.bars.map(bar => {
       const noteValueInt = convertNoteValueToInt(bar.noteValue);
       return <Bar
-        key={`bar${bar.id}`}
-        id={bar.id}
+        key={`bar${bar.position}`}
         beats={bar.beats}
         noteValue={noteValueInt}
-        updateBeats={(beats: number) => this.updateBeats(bar.id, beats)}
-        updateNoteValue={(noteInt: number) => this.updateNoteValue(bar.id, noteInt)}
-        remove={() => this.removeBar(bar.id)}
+        updateBeats={(beats: number) => this.updateBeats(bar.position, beats)}
+        updateNoteValue={(noteInt: number) => this.updateNoteValue(bar.position, noteInt)}
+        remove={() => this.removeBar(bar.position)}
       />;
     });
     return bars;
@@ -181,13 +205,12 @@ class Metronome extends React.PureComponent<Props, State> {
   }
 
   removeBar = (idx: number) => {
-    // TODO: this is goobed up because of idx/id issue
     const newBars = this.state.bars.slice();
     newBars.map(bar => {
-      if (bar.id <= idx) {
+      if (bar.position <= idx) {
         return;
       }
-      bar.id -= 1;
+      bar.position -= 1;
     });
     newBars.splice(idx, 1);
     this.setState({
@@ -199,7 +222,7 @@ class Metronome extends React.PureComponent<Props, State> {
     return (
       <div id='metronome'>
         <SettingsBar
-          bpm={this.state.bpm}
+          tempo={this.state.tempo}
           playing={this.state.playing}
           togglePlay={this.togglePlay}
           updateBPM={this.handleBPMChange}

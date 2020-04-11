@@ -4,7 +4,6 @@ import BarField from '../BarField';
 import './Bar.scss';
 
 interface Props {
-  id: number;
   beats: number;
   noteValue: number;
   bpm?: number;

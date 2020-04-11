@@ -3,7 +3,6 @@ import { BarData, NoteValue } from '../types/barTypes';
 export const makeJolt = (): BarData[] => {
     const data: BarData[] = [];
     for (let i = 0; i < 12; i++) {
-        const id = i;
         let beats: number;
         if (i < 5) {
             beats = 5;
@@ -13,9 +12,9 @@ export const makeJolt = (): BarData[] => {
             beats = 6;
         }
         data.push({
-            id,
             beats,
-            noteValue: NoteValue.QUARTER
+            position: i,
+            noteValue: NoteValue.SIXTEENTH
         });
     }
     return data;
@@ -24,7 +23,6 @@ export const makeJolt = (): BarData[] => {
 const makeJolt2 = (): BarData[] => {
     const data: BarData[] = [];
     for (let i = 0; i < 8; i++) {
-        const id = i;
         let beats: number;
         let noteValue: NoteValue = NoteValue.SIXTEENTH;
         if (i === 0 || i === 4) {
@@ -38,9 +36,9 @@ const makeJolt2 = (): BarData[] => {
             beats = 6;
         }
         data.push({
-            id,
             beats,
-            noteValue
+            noteValue,
+            position: i
         });
     }
     return data;

@@ -7,7 +7,12 @@ export enum NoteValue {
 }
 
 export interface BarData {
-    id: number;
+    position: number;
     beats: number;
+    noteValue: NoteValue;
+}
+
+export interface Tempo {
+    bpm: number;
     noteValue: NoteValue;
 }
