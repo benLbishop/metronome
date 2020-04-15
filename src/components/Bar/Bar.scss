@@ -3,5 +3,31 @@
     flex-direction: column;
     flex: 1;
     background-color: black;
-    align-items: stretch;
+    // align-items: stretch;
+}
+
+.buttonRow {
+    display: flex;
+    flex-direction: row;
+}
+
+.timeSignature {
+    display: flex;
+    flex-direction: column;
+}
+
+.grouping {
+    display: flex;
+    flex-direction: column;
+}
+
+.groupingsContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+// TODO: rename
+.barMain {
+    display: flex;
+    flex-direction: row;
 }
