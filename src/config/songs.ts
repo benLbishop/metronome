@@ -13,11 +13,10 @@ export const makeJolt = (): BarData[] => {
         }
         data.push({
             beats,
-            position: i,
+            id: i,
             noteValue: NoteValue.SIXTEENTH,
             groupings: [{
                 beats,
-                position: 0,
                 noteValue: NoteValue.SIXTEENTH
             }]
         });
@@ -43,11 +42,10 @@ const makeJolt2 = (): BarData[] => {
         data.push({
             beats,
             noteValue,
-            position: i,
+            id: i,
             groupings: [{
                 beats,
-                noteValue,
-                position: 0
+                noteValue
             }]
         });
     }
@@ -57,20 +55,18 @@ const makeJolt2 = (): BarData[] => {
 export const makeElectricSunrise = (): BarData[] => {
     const groupings: GroupData[] = [];
     groupings.push({
-        position: 0,
         beats: 8,
         noteValue: NoteValue.DOTTED_EIGHTH
         // subdivision: 3
     });
     groupings.push({
-        position: 1,
         beats: 1,
         noteValue: NoteValue.EIGHTH
         // subdivision: 2
     });
     const bar: BarData = {
         groupings,
-        position: 0,
+        id: 0,
         noteValue: NoteValue.EIGHTH,
         beats: 13
     };

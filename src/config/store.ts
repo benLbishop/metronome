@@ -3,9 +3,10 @@ import ReduxThunk from 'redux-thunk';
 import { LoggerPredicate, createLogger } from 'redux-logger';
 
 import { RootState } from '../reducers';
+import MetronomeReducer from '../reducers/metronomeReducer';
 
 const rootReducer = combineReducers({
-
+    metronome: MetronomeReducer
 });
 
 const logActionFilter: LoggerPredicate = (getState: () => RootState, action: any) => {

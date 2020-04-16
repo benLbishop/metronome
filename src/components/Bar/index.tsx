@@ -9,8 +9,8 @@ interface Props {
   bar: BarData;
   updateBeats(beats: number): void;
   updateNoteValue(noteValue: number): void;
-  updateGroupingBeats(position: number, beats: number): void;
-  updateGroupingNoteValue(position: number, noteValue: number): void;
+  updateGroupingBeats(idx: number, beats: number): void;
+  updateGroupingNoteValue(idx: number, noteValue: number): void;
   remove(): void;
   addGrouping(): void;
   copy(): void;
@@ -22,12 +22,12 @@ const Bar: React.FC<Props> = (props: Props) => {
   const noteValueInt = convertNoteValueToInt(noteValue);
 
   const getGroupingDisplay = (data: GroupData[]): JSX.Element[] => {
-    const display: JSX.Element[] = data.map(grouping => {
+    const display: JSX.Element[] = data.map((grouping, idx) => {
       const groupingNoteValueInt = convertNoteValueToInt(grouping.noteValue);
       return (
-        <div key={`bar${props.bar.position}grouping${grouping.position}`} className='grouping'>
-          <BarField value={grouping.beats} updateValue={(newBeats: number) => props.updateGroupingBeats(grouping.position, newBeats)} />
-          <BarField value={groupingNoteValueInt} updateValue={(newNoteValue: number) => props.updateGroupingNoteValue(grouping.position, newNoteValue)} />
+        <div key={`bar${props.bar.id}grouping${idx}`} className='grouping'>
+          <BarField value={grouping.beats} updateValue={(newBeats: number) => props.updateGroupingBeats(idx, newBeats)} />
+          <BarField value={groupingNoteValueInt} updateValue={(newNoteValue: number) => props.updateGroupingNoteValue(idx, newNoteValue)} />
         </div>
       );
     });

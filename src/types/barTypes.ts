@@ -13,14 +13,13 @@ export enum NoteValue {
 
 // TODO: rename to grouping data
 export interface GroupData {
-    position: number;
     beats: number;
     noteValue: NoteValue;
     subdivision?: number; // TODO: not sure if this is the right way to do this
 }
 
 export interface BarData {
-    position: number;
+    id: number;
     beats: number;
     noteValue: NoteValue;
     groupings: GroupData[];
