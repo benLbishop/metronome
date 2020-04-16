@@ -22,15 +22,22 @@ interface State {
   curGroupingIdx: number;
   playing: boolean;
   timeout?: NodeJS.Timeout;
-  nextBarId: number;
 }
 
 // TODO: move to constants
-const DEFAULT_BAR_DATA: BarData = {
+const DEFAULT_GROUPING_DATA: GroupData = {
   position: 0,
   beats: 4,
   noteValue: NoteValue.QUARTER
 };
+
+const DEFAULT_BAR_DATA: BarData = {
+  position: 0,
+  beats: 4,
+  noteValue: NoteValue.QUARTER,
+  groupings: [DEFAULT_GROUPING_DATA]
+};
+
 
 // TODO: idk where these go
 const unemphasizedSound = new Howl({
@@ -70,7 +77,7 @@ class Metronome extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      bars: makeElectricSunrise(),
+      bars: makeJolt(),
       tempo: {
         bpm: 120,
         noteValue: NoteValue.QUARTER
@@ -78,7 +85,6 @@ class Metronome extends React.Component<Props, State> {
       playing: false,
       curBeat: 0,
       curBarIdx: 0,
-      nextBarId: 2,
       curGroupingIdx: 0
     };
   }
@@ -246,14 +252,16 @@ class Metronome extends React.Component<Props, State> {
 
   getBars = (): JSX.Element[] => {
     const bars: JSX.Element[] = this.state.bars.map(bar => {
-      const noteValueInt = convertNoteValueToInt(bar.noteValue);
       return <Bar
         key={`bar${bar.position}`}
-        beats={bar.beats}
-        noteValue={noteValueInt}
+        bar={bar}
+        updateGroupingBeats={(groupingPosition: number, newBeats: number) => this.updateGroupingBeats(bar.position, groupingPosition, newBeats)}
+        updateGroupingNoteValue={(groupingPosition: number, newNoteValue: number) => this.updateGroupingNoteValue(bar.position, groupingPosition, newNoteValue)}
         updateBeats={(beats: number) => this.updateBeats(bar.position, beats)}
         updateNoteValue={(noteInt: number) => this.updateNoteValue(bar.position, noteInt)}
         remove={() => this.removeBar(bar.position)}
+        copy={this.copyBar}
+        addGrouping={() => this.addGrouping(bar.position)}
       />;
     });
     return bars;
@@ -262,15 +270,14 @@ class Metronome extends React.Component<Props, State> {
   addBar = () => {
     const barAdder = (state: State, _props: Props): State => {
       const newBars = state.bars.slice();
-      const newBar = {
+      const newBar: BarData = {
         ...DEFAULT_BAR_DATA,
-        id: state.nextBarId
+        position: state.bars.length
       };
       newBars.push(newBar);
       return {
         ...state,
-        bars: newBars,
-        nextBarId: state.nextBarId + 1
+        bars: newBars
       };
     };
     this.setState(barAdder);
@@ -288,6 +295,64 @@ class Metronome extends React.Component<Props, State> {
     this.setState({
       bars: newBars
     });
+  }
+
+  // TODO: sort out id/idx thing for bars
+  updateGroupingBeats = (barPos: number, groupPos: number, newBeats: number) => {
+    const newBars = this.state.bars.slice();
+    const targetBar = newBars[barPos];
+    const newGroupings = targetBar.groupings.slice();
+    newGroupings[groupPos] = {
+      ...newGroupings[groupPos],
+      beats: newBeats
+    };
+    newBars[barPos] = {
+      ...newBars[barPos],
+      groupings: newGroupings
+    };
+    this.setState({
+      bars: newBars
+    });
+  }
+
+  updateGroupingNoteValue = (barPos: number, groupPos: number, newNoteInt: number) => {
+    const newNoteValue = convertIntToNoteValue(newNoteInt);
+    const newBars = this.state.bars.slice();
+    const targetBar = newBars[barPos];
+    const newGroupings = targetBar.groupings.slice();
+    newGroupings[groupPos] = {
+      ...newGroupings[groupPos],
+      noteValue: newNoteValue
+    };
+    newBars[barPos] = {
+      ...newBars[barPos],
+      groupings: newGroupings
+    };
+    this.setState({
+      bars: newBars
+    });
+  }
+
+  addGrouping = (barIdx: number) => {
+    const groupingAdder = (state: State, _props: Props): State => {
+      const newBars = state.bars.slice();
+      const nextGroupingIdx = newBars[barIdx].groupings.length;
+      newBars[barIdx] = {
+        ...newBars[barIdx],
+        groupings: [...newBars[barIdx].groupings, {...DEFAULT_GROUPING_DATA, position: nextGroupingIdx}]
+      };
+      console.log('newbars: ', newBars);
+      return {
+        ...state,
+        bars: newBars
+      };
+    };
+    this.setState(groupingAdder);
+  }
+
+  copyBar = () => {
+    // TODO
+    console.log('copyBar not implemented');
   }
 
   render() {
