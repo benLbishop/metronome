@@ -1,18 +1,14 @@
 import React from 'react';
 
 import './Metronome.scss';
-import { BarData, NoteValue, Tempo, GroupData } from '../../types/barTypes';
+import { BarData, Tempo } from '../../types/barTypes';
 
 import Bar from '../Bar';
-import { makeJolt, makeElectricSunrise } from '../../config/songs';
 import SettingsBar from '../SettingsBar';
 
 interface Props {
   bars: BarData[];
   tempo: Tempo;
-  curBarIdx: number;
-  curBeat: number;
-  curGroupingIdx: number;
   playing: boolean;
   togglePlay(): void;
   updateBPM(newBPM: number): void;

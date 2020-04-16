@@ -35,7 +35,7 @@ const initialState: MetronomeState = {
     curBeat: 0,
     curBarIdx: 0,
     curGroupingIdx: 0,
-    newBarId: 0,
+    newBarId: 1,
     bars: [DEFAULT_BAR_DATA]
 };
 
@@ -82,7 +82,8 @@ const MetronomeReducer = (
                 ...state,
                 curBarIdx: newBarIdx,
                 curBeat: newBeat,
-                curGroupingIdx: newGroupingIdx
+                curGroupingIdx: newGroupingIdx,
+                curTimeout: action.payload.timeout
             };
         }
         case getType(metronomeActions.addBar): {
@@ -182,12 +183,6 @@ const MetronomeReducer = (
             return {
                 ...state,
                 bars: newBars
-            };
-        }
-        case getType(metronomeActions.updateCurTimeout): {
-            return {
-                ...state,
-                curTimeout: action.payload.timeout
             };
         }
         case getType(metronomeActions.cancelCurTimeout): {

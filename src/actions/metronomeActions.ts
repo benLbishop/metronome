@@ -20,7 +20,10 @@ export const metronomeActions = {
         UPDATE_BPM,
         (newBPM: number) => ({ newBPM })
     )(),
-    updateCurBeat: createAction(UPDATE_CUR_BEAT)(),
+    updateCurBeat: createAction(
+        UPDATE_CUR_BEAT,
+        (timeout: NodeJS.Timeout) => ({ timeout })
+        )(),
     addBar: createAction(ADD_BAR)(),
     removeBar: createAction(
         REMOVE_BAR,
@@ -50,10 +53,6 @@ export const metronomeActions = {
         'UPDATE_GROUPING_NOTE_VALUE', // TODO
         (barIdx: number, groupingIdx: number, newNoteValue: NoteValue) => ({ barIdx, groupingIdx, newNoteValue })
     )(),
-    updateCurTimeout: createAction(
-        'UPDATE_CUR_TIMEOUT', // TODO
-        (timeout: NodeJS.Timeout) => ({ timeout })
-    )(),
     cancelCurTimeout: createAction('CANCEL_CUR_TIMEOUT')() // TODO
 };
 
@@ -71,10 +70,37 @@ export const startSound = () => {
         const subdivisionMultiplier = curGrouping.subdivision ? curGrouping.subdivision : 1;
         noteDuration = (60 / tempo.bpm) / (noteValueRatio * subdivisionMultiplier);
 
-        dispatch(metronomeActions.updateCurBeat());
         const timeout = setTimeout(() => {
-            startSound();
+            dispatch(startSound());
         }, noteDuration * 1000);
-        dispatch(metronomeActions.updateCurTimeout(timeout));
+        dispatch(metronomeActions.updateCurBeat(timeout));
+    };
+};
+
+export const parseBarNoteValueUpdate = (idx: number, newValue: number) => {
+    return (dispatch: ThunkDispatch<RootState, void, Action>, getState: () => RootState) => {
+        // TODO: validation
+        const newNoteValue = convertIntToNoteValue(newValue);
+        dispatch(metronomeActions.updateBarNoteValue(idx, newNoteValue));
+    };
+};
+
+export const parseGroupingNoteValueUpdate = (barIdx: number, groupingIdx: number, newValue: number) => {
+    return (dispatch: ThunkDispatch<RootState, void, Action>, getState: () => RootState) => {
+        // TODO: validation
+        const newNoteValue = convertIntToNoteValue(newValue);
+        dispatch(metronomeActions.updateGroupingNoteValue(barIdx, groupingIdx, newNoteValue));
+    };
+};
+
+export const handleTogglePlay = () => {
+    return (dispatch: ThunkDispatch<RootState, void, Action>, getState: () => RootState) => {
+        const playing = getState().metronome.playing;
+        if (playing) {
+            dispatch(metronomeActions.cancelCurTimeout());
+        } else {
+            dispatch(startSound());
+        }
+        dispatch(metronomeActions.togglePlay());
     };
 };

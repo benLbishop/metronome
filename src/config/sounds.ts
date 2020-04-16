@@ -28,14 +28,14 @@ const groupSound = new Howl({
 
 export const playSound = (curGrouping: GroupData, curBeat: number, curGroupingIdx: number, subdivision?: number) => {
     if (curBeat === 0) {
-      if (curGroupingIdx === 0) {
-        emphasizedSound.play();
-      } else {
-        unemphasizedSound.play();
-      }
+        if (curGroupingIdx === 0) {
+            emphasizedSound.play();
+        } else {
+            unemphasizedSound.play();
+        }
     } else if (subdivision && curBeat % subdivision !== 0) {
-      subdivSound.play();
+        subdivSound.play();
     } else {
-      groupSound.play();
+        groupSound.play();
     }
-  }
+};
