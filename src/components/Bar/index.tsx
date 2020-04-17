@@ -17,14 +17,13 @@ interface Props {
   copy(): void;
 }
 
-// TODO: convert to functional component
 const Bar: React.FC<Props> = (props: Props) => {
   const { noteValue, beats, groupings } = props.bar;
   const noteValueInt = convertNoteValueToInt(noteValue);
 
   return (
     <div className='bar'>
-      <div className='barMain'>
+      <div className='barFieldSection'>
         <TimeSignature
           className={'timeSignature'}
           beats={beats}

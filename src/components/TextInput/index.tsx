@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import './BarField.scss';
-// import { KeyCodes } from '../../types';
+import './TextInput.scss';
+import { KeyCodes } from '../../types/htmlTypes';
 
 interface Props {
   value: number;
   updateValue(newValue: number): void;
 }
 
-// TODO: rename because all I can think of is Garfield when I read it
-const BarField: React.FC<Props> = (props: Props) => {
+const TextInput: React.FC<Props> = (props: Props) => {
 
   const [isFocused, setIsFocused] = useState(false);
   const [tempValue, setTempValue] = useState<number | undefined>(props.value);
@@ -49,15 +48,14 @@ const BarField: React.FC<Props> = (props: Props) => {
     if (tempValue === undefined || tempValue <= 0) {
       return;
     }
-    // TODO: use KeyCodes enum
-    if (e.charCode === 13) {
+    if (e.charCode === KeyCodes.ENTER) {
       props.updateValue(tempValue);
     }
   };
 
   return (
       <input
-        className='barField'
+        className='textInput'
         type='text'
         value={getDisplayValue()}
         onChange={handleTextChange}
@@ -68,4 +66,4 @@ const BarField: React.FC<Props> = (props: Props) => {
   );
 };
 
-export default BarField;
+export default TextInput;

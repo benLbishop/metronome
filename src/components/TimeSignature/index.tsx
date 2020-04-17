@@ -1,5 +1,5 @@
 import React from 'react';
-import BarField from '../BarField';
+import TextInput from '../TextInput';
 
 interface Props {
   className?: string;
@@ -13,8 +13,8 @@ const TimeSignature: React.FC<Props> = (props: Props) => {
   const { beats, noteValueInt } = props;
   return (
     <div className={props.className}>
-      <BarField value={beats} updateValue={(newBeats: number) => props.updateBeats(newBeats)} />
-      <BarField value={noteValueInt} updateValue={(newValue: number) => props.updateNoteValue(newValue)} />
+      <TextInput value={beats} updateValue={(newBeats: number) => props.updateBeats(newBeats)} />
+      <TextInput value={noteValueInt} updateValue={(newValue: number) => props.updateNoteValue(newValue)} />
     </div>
   );
 };

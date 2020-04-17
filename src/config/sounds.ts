@@ -5,7 +5,7 @@ import subdivClick from '../res/sounds/subdiv.wav';
 import groupClick from '../res/sounds/group.wav';
 import { GroupData } from '../types/barTypes';
 
-// TODO: idk where these go
+// TODO: idk where these go or what the best way/time to load them is
 const unemphasizedSound = new Howl({
     src: [lowClick],
     volume: 1

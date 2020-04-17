@@ -6,7 +6,13 @@ import './App.scss';
 import Metronome from '../Metronome';
 import { RootState } from '../../reducers';
 import { BarData, Tempo } from '../../types/barTypes';
-import { metronomeActions, handleTogglePlay, parseGroupingNoteValueUpdate, parseBarNoteValueUpdate } from '../../actions/metronomeActions';
+import {
+  metronomeActions,
+  handleTogglePlay,
+  parseGroupingNoteValueUpdate,
+  parseBarNoteValueUpdate,
+  updateTempoNoteValue
+} from '../../actions/metronomeActions';
 
 interface Props {
   bars: BarData[];
@@ -14,6 +20,7 @@ interface Props {
   playing: boolean;
   togglePlay(): void;
   updateBPM(newBPM: number): void;
+  updateNoteValue(newValue: number): void;
   addBar(): void;
   removeBar(idx: number): void;
   copyBar(idx: number): void;
@@ -46,6 +53,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, undefined, Action
   return {
     togglePlay: () => dispatch(handleTogglePlay()),
     updateBPM: (newBPM: number) => dispatch(metActs.updateBPM(newBPM)),
+    updateNoteValue: (newValue: number) => dispatch(updateTempoNoteValue(newValue)),
     addBar: () => dispatch(metActs.addBar()),
     removeBar: (idx: number) => dispatch(metActs.removeBar(idx)),
     copyBar: (idx: number) => dispatch(metActs.copyBar(idx)),

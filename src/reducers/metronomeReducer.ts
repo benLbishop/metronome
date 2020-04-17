@@ -59,6 +59,15 @@ const MetronomeReducer = (
                 }
             };
         }
+        case getType(metronomeActions.updateNoteValue): {
+            return {
+                ...state,
+                tempo: {
+                    ...state.tempo,
+                    noteValue: action.payload.newValue
+                }
+            };
+        }
         case getType(metronomeActions.updateCurBeat): {
             // 1. take curBeat and find current measure
             const { curBeat, curBarIdx, bars, curGroupingIdx } = state;

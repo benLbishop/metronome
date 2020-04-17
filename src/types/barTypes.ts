@@ -7,15 +7,12 @@ export enum NoteValue {
     DOTTED_EIGHTH = 'DOTTED_EIGHTH' // TODO: make dotted function of some sort
 }
 
-// export enum Subdivision {
-
-// }
-
+// TODO: figure out why the heck my compiler was getting mad because of my index.ts in the types folder
 // TODO: rename to grouping data
 export interface GroupData {
     beats: number;
     noteValue: NoteValue;
-    subdivision?: number; // TODO: not sure if this is the right way to do this
+    subdivision?: number; // TODO: not sure if this is the right way to do this. Probably should use note value? What about triplets?
 }
 
 export interface BarData {
