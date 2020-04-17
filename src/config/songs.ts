@@ -24,7 +24,7 @@ export const makeJolt = (): BarData[] => {
     return data;
 };
 
-const makeJolt2 = (): BarData[] => {
+export const makeJolt2 = (): BarData[] => {
     const data: BarData[] = [];
     for (let i = 0; i < 8; i++) {
         let beats: number;

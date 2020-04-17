@@ -17,6 +17,7 @@ interface Props {
   copy(): void;
 }
 
+// TODO: make button row a component?
 const Bar: React.FC<Props> = (props: Props) => {
   const { noteValue, beats, groupings } = props.bar;
   const noteValueInt = convertNoteValueToInt(noteValue);

@@ -17,6 +17,7 @@ const DEFAULT_BAR_DATA: BarData = {
     groupings: [DEFAULT_GROUPING_DATA]
 };
 
+// TODO: break bar stuff into a separate reducer? curBeat depends on bar info, so maybe not
 export interface MetronomeState {
     playing: boolean;
     tempo: Tempo;

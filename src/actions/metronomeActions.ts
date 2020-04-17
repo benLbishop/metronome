@@ -69,6 +69,7 @@ export const metronomeActions = {
 
 export type MetronomeAction = ActionType<typeof metronomeActions>;
 
+// TODO: clean up
 export const startSound = () => {
     return (dispatch: ThunkDispatch<RootState, void, Action>, getState: () => RootState) => {
         const { tempo, curBarIdx, bars, curBeat, curGroupingIdx } = getState().metronome;
@@ -76,7 +77,7 @@ export const startSound = () => {
         let noteDuration: number;
 
         const curGrouping = curBar.groupings[curGroupingIdx];
-        playSound(curGrouping, curBeat, curGroupingIdx, curGrouping.subdivision);
+        playSound(curBeat, curGroupingIdx, curGrouping.subdivision);
         const noteValueRatio = convertNoteValueToInt(tempo.noteValue) / convertNoteValueToInt(curGrouping.noteValue);
         const subdivisionMultiplier = curGrouping.subdivision ? curGrouping.subdivision : 1;
         noteDuration = (60 / tempo.bpm) / (noteValueRatio * subdivisionMultiplier);

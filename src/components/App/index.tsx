@@ -14,6 +14,15 @@ import {
   updateTempoNoteValue
 } from '../../actions/metronomeActions';
 
+// TODO add testing
+// TODO styling
+// TODO: maybe some of the mapDispatchToProps could be moved to Bar? Idk if that's a rational structure
+// TODO: try to figure out if I can combine logic (i.e. don't have updateBeats/updateValue for global tempo, bars, and groupings)
+// TODO: add saving/loading songs functionality
+// TODO: add ability to start/loop metronome from a non-zero bar
+// TODO: count ins
+// TODO: key shortcuts
+
 interface Props {
   bars: BarData[];
   tempo: Tempo;

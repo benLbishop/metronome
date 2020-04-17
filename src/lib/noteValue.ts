@@ -1,5 +1,9 @@
 import { NoteValue } from '../types/barTypes';
 
+// TODO: really lock down how the heck this works.
+// when and how are the int values used?
+// how should note values be changed? (probably dropdowns)
+// how are dotted notes/triplets/etc handled?
 export const convertNoteValueToInt = (value: NoteValue): number => {
     switch (value) {
         case NoteValue.WHOLE: {

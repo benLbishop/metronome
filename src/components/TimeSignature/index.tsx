@@ -9,6 +9,7 @@ interface Props {
   updateNoteValue(newValue: number): void;
 }
 
+// TODO: is there a better way for this component to receive a className/other styling properties?
 const TimeSignature: React.FC<Props> = (props: Props) => {
   const { beats, noteValueInt } = props;
   return (

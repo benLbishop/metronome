@@ -7,6 +7,8 @@ interface Props {
   updateValue(newValue: number): void;
 }
 
+// TODO: make component generic? Right now this can only be a text input for numbers,
+// and that isn't clear at all by the component name
 const TextInput: React.FC<Props> = (props: Props) => {
 
   const [isFocused, setIsFocused] = useState(false);
