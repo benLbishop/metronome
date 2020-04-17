@@ -9,12 +9,14 @@ interface Props {
     tempo: Tempo;
     playing: boolean;
     togglePlay(): void;
+    addBar(): void;
     updateBPM(bpm: number): void;
 }
 
 const SettingsBar: React.FC<Props> = (props: Props) => {
   return (
     <div className='settingsBar'>
+      <button onClick={props.addBar}>Add Bar</button>
       <button className='playButton' onMouseDown={props.togglePlay}>{props.playing ? 'stop' : 'start'}</button>
       <div className='stdP'>BPM:</div>
       <BarField value={props.tempo.bpm} updateValue={props.updateBPM}/>

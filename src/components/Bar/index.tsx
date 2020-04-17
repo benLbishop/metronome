@@ -1,9 +1,10 @@
 import React from 'react';
-import BarField from '../BarField';
 
 import './Bar.scss';
-import { BarData, GroupData } from '../../types/barTypes';
+import { BarData } from '../../types/barTypes';
 import { convertNoteValueToInt } from '../../lib/noteValue';
+import GroupingsContainer from '../GroupingsContainer';
+import TimeSignature from '../TimeSignature';
 
 interface Props {
   bar: BarData;
@@ -21,29 +22,21 @@ const Bar: React.FC<Props> = (props: Props) => {
   const { noteValue, beats, groupings } = props.bar;
   const noteValueInt = convertNoteValueToInt(noteValue);
 
-  const getGroupingDisplay = (data: GroupData[]): JSX.Element[] => {
-    const display: JSX.Element[] = data.map((grouping, idx) => {
-      const groupingNoteValueInt = convertNoteValueToInt(grouping.noteValue);
-      return (
-        <div key={`bar${props.bar.id}grouping${idx}`} className='grouping'>
-          <BarField value={grouping.beats} updateValue={(newBeats: number) => props.updateGroupingBeats(idx, newBeats)} />
-          <BarField value={groupingNoteValueInt} updateValue={(newNoteValue: number) => props.updateGroupingNoteValue(idx, newNoteValue)} />
-        </div>
-      );
-    });
-    return display;
-  };
-
   return (
     <div className='bar'>
       <div className='barMain'>
-        <div className='timeSignature'>
-          <BarField value={beats} updateValue={props.updateBeats}/>
-          <BarField value={noteValueInt} updateValue={props.updateNoteValue}/>
-        </div>
-        <div className='groupingsContainer'>
-          {getGroupingDisplay(groupings)}
-        </div>
+        <TimeSignature
+          className={'timeSignature'}
+          beats={beats}
+          noteValueInt={noteValueInt}
+          updateBeats={props.updateBeats}
+          updateNoteValue={props.updateNoteValue}
+        />
+        <GroupingsContainer
+          groupings={groupings}
+          updateBeats={props.updateGroupingBeats}
+          updateNoteValue={props.updateGroupingNoteValue}
+        />
       </div>
       <div className='buttonRow'>
         <button onClick={props.addGrouping}>Add group</button>

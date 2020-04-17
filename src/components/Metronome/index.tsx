@@ -53,9 +53,9 @@ class Metronome extends React.Component<Props, State> {
           tempo={this.props.tempo}
           playing={this.props.playing}
           togglePlay={this.props.togglePlay}
+          addBar={this.props.addBar}
           updateBPM={this.props.updateBPM}
         />
-        <button onClick={this.props.addBar}>Add Bar</button>
         <div className='barContainer'>
           {this.getBarsDisplay()}
         </div>

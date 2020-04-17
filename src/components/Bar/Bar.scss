@@ -14,16 +14,7 @@
 .timeSignature {
     display: flex;
     flex-direction: column;
-}
-
-.grouping {
-    display: flex;
-    flex-direction: column;
-}
-
-.groupingsContainer {
-    display: flex;
-    flex-direction: row;
+    padding-right: 2ex;
 }
 
 // TODO: rename
