@@ -66,7 +66,7 @@ export const startSound = () => {
 
         const curGrouping = curBar.groupings[curGroupingIdx];
         playSound(curGrouping, curBeat, curGroupingIdx, curGrouping.subdivision);
-        const noteValueRatio = convertNoteValueToInt(curGrouping.noteValue) / convertNoteValueToInt(tempo.noteValue);
+        const noteValueRatio = convertNoteValueToInt(tempo.noteValue) / convertNoteValueToInt(curGrouping.noteValue);
         const subdivisionMultiplier = curGrouping.subdivision ? curGrouping.subdivision : 1;
         noteDuration = (60 / tempo.bpm) / (noteValueRatio * subdivisionMultiplier);
 
