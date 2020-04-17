@@ -1,12 +1,12 @@
 import React from 'react';
-import { GroupData } from '../../types/barTypes';
+import { GroupingData } from '../../types/barTypes';
 import { convertNoteValueToInt } from '../../lib/noteValue';
 
 import './Grouping.scss';
 import TimeSignature from '../TimeSignature';
 
 interface Props {
-  grouping: GroupData;
+  grouping: GroupingData;
   updateBeats(newBeats: number): void;
   updateNoteValue(newValue: number): void;
 }

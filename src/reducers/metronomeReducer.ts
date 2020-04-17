@@ -1,9 +1,11 @@
 import { metronomeActions, MetronomeAction } from '../actions/metronomeActions';
 import { getType } from 'typesafe-actions';
-import { BarData, GroupData, NoteValue, Tempo } from '../types/barTypes';
+import { BarData, GroupingData, NoteValue, Tempo } from '../types/barTypes';
+import { checkIfBarFull } from '../lib/bar';
+import { makeElectricSunrise } from '../config/songs';
 
 // TODO: move to constants
-const DEFAULT_GROUPING_DATA: GroupData = {
+const DEFAULT_GROUPING_DATA: GroupingData = {
     beats: 4,
     noteValue: NoteValue.QUARTER
 };
@@ -36,7 +38,7 @@ const initialState: MetronomeState = {
     curBarIdx: 0,
     curGroupingIdx: 0,
     newBarId: 1,
-    bars: [DEFAULT_BAR_DATA]
+    bars: makeElectricSunrise()
 };
 
 const MetronomeReducer = (

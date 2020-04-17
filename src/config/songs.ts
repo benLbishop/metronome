@@ -1,4 +1,4 @@
-import { BarData, NoteValue, GroupData } from '../types/barTypes';
+import { BarData, NoteValue, GroupingData } from '../types/barTypes';
 
 export const makeJolt = (): BarData[] => {
     const data: BarData[] = [];
@@ -53,7 +53,7 @@ const makeJolt2 = (): BarData[] => {
 };
 
 export const makeElectricSunrise = (): BarData[] => {
-    const groupings: GroupData[] = [];
+    const groupings: GroupingData[] = [];
     groupings.push({
         beats: 8,
         noteValue: NoteValue.DOTTED_EIGHTH

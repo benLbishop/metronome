@@ -1,11 +1,11 @@
 import React from 'react';
-import { GroupData } from '../../types/barTypes';
+import { GroupingData } from '../../types/barTypes';
 import Grouping from '../Grouping';
 
 import './GroupingsContainer.scss';
 
 interface Props {
-  groupings: GroupData[];
+  groupings: GroupingData[];
   updateBeats(idx: number, newBeats: number): void;
   updateNoteValue(idx: number, newValue: number): void;
 }

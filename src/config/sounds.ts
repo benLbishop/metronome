@@ -3,7 +3,7 @@ import highClick from '../res/sounds/highclick.wav';
 import lowClick from '../res/sounds/lowclick.wav';
 import subdivClick from '../res/sounds/subdiv.wav';
 import groupClick from '../res/sounds/group.wav';
-import { GroupData } from '../types/barTypes';
+import { GroupingData } from '../types/barTypes';
 
 // TODO: idk where these go or what the best way/time to load them is
 const unemphasizedSound = new Howl({
@@ -26,7 +26,7 @@ const groupSound = new Howl({
     volume: 1
 });
 
-export const playSound = (curGrouping: GroupData, curBeat: number, curGroupingIdx: number, subdivision?: number) => {
+export const playSound = (curGrouping: GroupingData, curBeat: number, curGroupingIdx: number, subdivision?: number) => {
     if (curBeat === 0) {
         if (curGroupingIdx === 0) {
             emphasizedSound.play();
