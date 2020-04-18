@@ -28,6 +28,8 @@ export interface MetronomeState {
     newBarId: number; // TODO: use some kind of id library
     bars: BarData[];
     curTimeout?: NodeJS.Timeout;
+    startingBarIdx: number;
+    endingBarIdx: number;
 }
 
 const initialState: MetronomeState = {
@@ -40,7 +42,9 @@ const initialState: MetronomeState = {
     curBarIdx: 0,
     curGroupingIdx: 0,
     newBarId: 1,
-    bars: makeJolt()
+    bars: makeJolt(),
+    startingBarIdx: 0,
+    endingBarIdx: 0
 };
 
 const MetronomeReducer = (
@@ -88,7 +92,10 @@ const MetronomeReducer = (
                 newGroupingIdx = curGroupingIdx + 1;
                 if (newGroupingIdx >= curBar.groupings.length) {
                     newGroupingIdx = 0;
-                    newBarIdx = (curBarIdx + 1) % bars.length;
+                    newBarIdx += 1;
+                    if (newBarIdx > state.endingBarIdx) {
+                        newBarIdx = state.startingBarIdx;
+                    }
                 }
             }
             return {
@@ -99,6 +106,26 @@ const MetronomeReducer = (
                 curTimeout: action.payload.timeout
             };
         }
+        case getType(metronomeActions.updateStartingBarIdx): {
+            const newIdx = action.payload.newIdx;
+            if (newIdx < 0 || newIdx > state.endingBarIdx) {
+                return state;
+            }
+            return {
+                ...state,
+                startingBarIdx: action.payload.newIdx
+            };
+        }
+        case getType(metronomeActions.updateEndingBarIdx): {
+            const newIdx = action.payload.newIdx;
+            if (newIdx > state.bars.length || newIdx < state.startingBarIdx) {
+                return state;
+            }
+            return {
+                ...state,
+                endingBarIdx: action.payload.newIdx
+            };
+        }
         case getType(metronomeActions.addBar): {
             const newBars = state.bars.slice();
             const newBar: BarData = {
@@ -106,8 +133,13 @@ const MetronomeReducer = (
                 id: state.newBarId
             };
             newBars.push(newBar);
+            let endingBarIdx = state.endingBarIdx;
+            if (state.endingBarIdx === state.bars.length - 1) {
+                endingBarIdx += 1;
+            }
             return {
                 ...state,
+                endingBarIdx,
                 bars: newBars,
                 newBarId: state.newBarId + 1
             };
@@ -116,8 +148,13 @@ const MetronomeReducer = (
             const { idx } = action.payload;
             const newBars = state.bars.slice();
             newBars.splice(idx, 1);
+            let endingBarIdx = state.endingBarIdx;
+            if (state.endingBarIdx === state.bars.length - 1) {
+                endingBarIdx -= 1;
+            }
             return {
                 ...state,
+                endingBarIdx,
                 bars: newBars
             };
         }
@@ -251,7 +288,7 @@ const MetronomeReducer = (
                 ...state,
                 curTimeout: undefined,
                 curBeat: 0,
-                curBarIdx: 0
+                curBarIdx: state.startingBarIdx
             };
         }
         default: {

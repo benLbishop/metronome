@@ -8,12 +8,6 @@ import SettingsBar from '../SettingsBar';
 
 interface Props {
   bars: BarData[];
-  tempo: Tempo;
-  playing: boolean;
-  togglePlay(): void;
-  updateBPM(newBPM: number): void;
-  updateNoteValue(newValue: NoteValue): void;
-  addBar(): void;
   removeBar(idx: number): void;
   copyBar(idx: number): void;
   updateBarNoteValue(idx: number, newValue: NoteValue): void;
@@ -31,9 +25,9 @@ const Metronome: React.FC<Props> = (props: Props) => {
       return <Bar
         key={`bar${bar.id}`}
         bar={bar}
-        updateNoteValue={(newVal: NoteValue) => props.updateBarNoteValue(idx, newVal)}
         remove={() => props.removeBar(idx)}
         copy={() => props.copyBar(idx)}
+        updateNoteValue={(newVal: NoteValue) => props.updateBarNoteValue(idx, newVal)}
         addGrouping={() => props.addGrouping(idx)}
         removeGrouping={(groupingIdx: number) => props.removeGrouping(idx, groupingIdx)}
         updateGroupingBeats={(groupingIdx: number, newBeats: number) => props.updateGroupingBeats(idx, groupingIdx, newBeats)}
@@ -46,17 +40,7 @@ const Metronome: React.FC<Props> = (props: Props) => {
 
   return (
     <div id='metronome'>
-      <SettingsBar
-        tempo={props.tempo}
-        playing={props.playing}
-        togglePlay={props.togglePlay}
-        addBar={props.addBar}
-        updateBPM={props.updateBPM}
-        updateNoteValue={props.updateNoteValue}
-      />
-      <div className='barContainer'>
-        {getBarsDisplay()}
-      </div>
+      {getBarsDisplay()}
     </div>
   );
 };

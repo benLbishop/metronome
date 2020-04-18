@@ -12,7 +12,6 @@ interface Props {
 const SelectInput: React.FC<Props> = (props) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newSelection = event.target.value;
-    // TODO: this says x is a string, so shouldn't TS get mad about this function? what if FormFields is a number?
     props.updateValue(newSelection);
   };
 

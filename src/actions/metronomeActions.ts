@@ -11,6 +11,8 @@ const TOGGLE_PLAY = 'TOGGLE_PLAY';
 const UPDATE_BPM = 'UPDATE_BPM';
 const UPDATE_NOTE_VALUE = 'UPDATE_NOTE_VALUE';
 const UPDATE_CUR_BEAT = 'UPDATE_CUR_BEAT';
+const UPDATE_STARTING_BAR_IDX = 'UPDATE_STARTING_BAR_IDX';
+const UPDATE_ENDING_BAR_IDX = 'UPDATE_ENDING_BAR_IDX';
 const ADD_BAR = 'ADD_BAR';
 const REMOVE_BAR = 'REMOVE_BAR';
 const COPY_BAR = 'COPY_BAR';
@@ -35,7 +37,15 @@ export const metronomeActions = {
     updateCurBeat: createAction(
         UPDATE_CUR_BEAT,
         (timeout: NodeJS.Timeout) => ({ timeout })
-        )(),
+    )(),
+    updateStartingBarIdx: createAction(
+        UPDATE_STARTING_BAR_IDX,
+        (newIdx: number) => ({ newIdx })
+    )(),
+    updateEndingBarIdx: createAction(
+        UPDATE_ENDING_BAR_IDX,
+        (newIdx: number) => ({ newIdx })
+    )(),
     addBar: createAction(ADD_BAR)(),
     removeBar: createAction(
         REMOVE_BAR,

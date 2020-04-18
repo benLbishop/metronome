@@ -7,13 +7,14 @@ import Metronome from '../Metronome';
 import { RootState } from '../../reducers';
 import { BarData, Tempo, NoteValue } from '../../types/barTypes';
 import { metronomeActions, handleTogglePlay } from '../../actions/metronomeActions';
+import SettingsBar from '../SettingsBar';
+import LeftMenu from '../LeftMenu';
 
 // TODO add testing
 // TODO styling
 // TODO: maybe some of the mapDispatchToProps could be moved to Bar? Idk if that's a rational structure
 // TODO: try to figure out if I can combine logic (i.e. don't have updateBeats/updateValue for global tempo, bars, and groupings)
 // TODO: add saving/loading songs functionality
-// TODO: add ability to start/loop metronome from a non-zero bar
 // TODO: count ins
 // TODO: key shortcuts
 
@@ -21,6 +22,8 @@ interface Props {
   bars: BarData[];
   tempo: Tempo;
   playing: boolean;
+  startingBarIdx: number;
+  endingBarIdx: number;
   togglePlay(): void;
   updateBPM(newBPM: number): void;
   updateNoteValue(newValue: NoteValue): void;
@@ -33,12 +36,36 @@ interface Props {
   updateGroupingBeats(barIdx: number, groupingIdx: number, newBeats: number): void;
   updateGroupingNoteValue(barIdx: number, groupingIdx: number, newValue: NoteValue): void;
   updateGroupingSubdivision(barIdx: number, groupingIdx: number, newValue?: number): void;
+  updateStartingBarIdx(newIdx: number): void;
+  updateEndingBarIdx(newIdx: number): void;
 }
 
 const App: React.FC<Props> = (props: Props) => {
   return (
     <div id='appInitialized'>
-      <Metronome {...props}/>
+      <LeftMenu
+        tempo={props.tempo}
+        playing={props.playing}
+        startingBarIdx={props.startingBarIdx}
+        endingBarIdx={props.endingBarIdx}
+        togglePlay={props.togglePlay}
+        addBar={props.addBar}
+        updateBPM={props.updateBPM}
+        updateNoteValue={props.updateNoteValue}
+        updateStartingBarIdx={props.updateStartingBarIdx}
+        updateEndingBarIdx={props.updateEndingBarIdx}
+      />
+      <Metronome
+        bars={props.bars}
+        removeBar={props.removeBar}
+        copyBar={props.copyBar}
+        updateBarNoteValue={props.updateBarNoteValue}
+        addGrouping={props.addGrouping}
+        removeGrouping={props.removeGrouping}
+        updateGroupingBeats={props.updateGroupingBeats}
+        updateGroupingNoteValue={props.updateGroupingNoteValue}
+        updateGroupingSubdivision={props.updateGroupingSubdivision}
+      />
     </div>
   );
 };
@@ -48,7 +75,9 @@ const mapStateToProps = (state: RootState) => {
   return {
     bars: met.bars,
     tempo: met.tempo,
-    playing: met.playing
+    playing: met.playing,
+    startingBarIdx: met.startingBarIdx,
+    endingBarIdx: met.endingBarIdx
   };
 };
 
@@ -58,6 +87,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, undefined, Action
     togglePlay: () => dispatch(handleTogglePlay()),
     updateBPM: (newBPM: number) => dispatch(metActs.updateBPM(newBPM)),
     updateNoteValue: (newValue: NoteValue) => dispatch(metActs.updateNoteValue(newValue)),
+    updateStartingBarIdx: (newIdx: number) => dispatch(metActs.updateStartingBarIdx(newIdx)),
+    updateEndingBarIdx: (newIdx: number) => dispatch(metActs.updateEndingBarIdx(newIdx)),
     addBar: () => dispatch(metActs.addBar()),
     removeBar: (idx: number) => dispatch(metActs.removeBar(idx)),
     copyBar: (idx: number) => dispatch(metActs.copyBar(idx)),
