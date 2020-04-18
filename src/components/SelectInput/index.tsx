@@ -9,6 +9,7 @@ interface Props {
   updateValue(newValue: string): void;
 }
 
+// TODO: lag on handleChange being called?
 const SelectInput: React.FC<Props> = (props) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newSelection = event.target.value;

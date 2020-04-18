@@ -8,13 +8,12 @@ import { RootState } from '../../reducers';
 import { BarData, Tempo, NoteValue } from '../../types/barTypes';
 import { handleTogglePlay, handleUpdateEndingBarIdx, handleUpdateStartingBarIdx } from '../../actions/metronomeActions';
 import LeftMenu from '../LeftMenu';
-import { songActions, handleAddBar, handleRemoveBar } from '../../actions/songActions';
+import { songActions, handleAddBar, handleRemoveBar, loadSong } from '../../actions/songActions';
 
 // TODO add testing
 // TODO styling
 // TODO: maybe some of the mapDispatchToProps could be moved to Bar? Idk if that's a rational structure
 // TODO: try to figure out if I can combine logic (i.e. don't have updateBeats/updateValue for global tempo, bars, and groupings)
-// TODO: add saving/loading songs functionality
 // TODO: count ins
 // TODO: key shortcuts
 // TODO: double renders/things over rendering in general
@@ -25,6 +24,7 @@ interface Props {
   playing: boolean;
   startingBarIdx: number;
   endingBarIdx: number;
+  curSongName: string;
   togglePlay(): void;
   updateBPM(newBPM: number): void;
   updateNoteValue(newValue: NoteValue): void;
@@ -39,6 +39,7 @@ interface Props {
   updateGroupingSubdivision(barIdx: number, groupingIdx: number, newValue?: number): void;
   updateStartingBarIdx(newIdx: number): void;
   updateEndingBarIdx(newIdx: number): void;
+  loadSong(songId: string): void;
 }
 
 const App: React.FC<Props> = (props: Props) => {
@@ -49,12 +50,14 @@ const App: React.FC<Props> = (props: Props) => {
         playing={props.playing}
         startingBarIdx={props.startingBarIdx}
         endingBarIdx={props.endingBarIdx}
+        curSongName={props.curSongName}
         togglePlay={props.togglePlay}
         addBar={props.addBar}
         updateBPM={props.updateBPM}
         updateNoteValue={props.updateNoteValue}
         updateStartingBarIdx={props.updateStartingBarIdx}
         updateEndingBarIdx={props.updateEndingBarIdx}
+        loadSong={props.loadSong}
       />
       <Metronome
         bars={props.bars}
@@ -79,7 +82,8 @@ const mapStateToProps = (state: RootState) => {
     tempo: song.tempo,
     playing: met.playing,
     startingBarIdx: met.startingBarIdx,
-    endingBarIdx: met.endingBarIdx
+    endingBarIdx: met.endingBarIdx,
+    curSongName: song.name
   };
 };
 
@@ -98,7 +102,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, undefined, Action
     removeGrouping: (barIdx: number, groupingIdx: number) => dispatch(songActions.removeGrouping(barIdx, groupingIdx)),
     updateGroupingBeats: (barIdx: number, groupingIdx: number, newBeats: number) => dispatch(songActions.updateGroupingBeats(barIdx, groupingIdx, newBeats)),
     updateGroupingNoteValue: (barIdx: number, groupingIdx: number, newValue: NoteValue) => dispatch(songActions.updateGroupingNoteValue(barIdx, groupingIdx, newValue)),
-    updateGroupingSubdivision: (barIdx: number, groupingIdx: number, newValue?: number) => dispatch(songActions.updateGroupingSubdivision(barIdx, groupingIdx, newValue))
+    updateGroupingSubdivision: (barIdx: number, groupingIdx: number, newValue?: number) => dispatch(songActions.updateGroupingSubdivision(barIdx, groupingIdx, newValue)),
+    loadSong: (songId: string) => dispatch(loadSong(songId))
   };
 };
 

@@ -110,7 +110,7 @@ export const loadSong = (songId: string) => {
             dispatch(songActions.songLoaded(song));
         } catch (err) {
             // TODO
-            console.log(err);
+            console.log('err in loadSong: ', err);
         }
     };
 };
