@@ -132,4 +132,10 @@ export const loadSong = (songId: string) => {
     };
 };
 
+const saveSong = () => {
+    // TODO
+    // TODO: prevent saving song with empty name
+    // TODO: overwrite id for DEFAULT_BAR_DATA or DEFAULT_GROUPING_DATA?
+};
+
 export type SongAction = ActionType<typeof songActions>;

@@ -14,10 +14,9 @@ interface Props {
 
 const GroupingsContainer: React.FC<Props> = (props: Props) => {
   const display: JSX.Element[] = props.groupings.map((grouping, idx) => {
-    // TODO: groupings need id so this isn't using an idx key
     return (
       <Grouping
-        key={`grouping${idx}`}
+        key={`grouping${grouping.id}`}
         grouping={grouping}
         remove={() => props.removeGrouping(idx)}
         updateBeats={(newBeats: number) => props.updateBeats(idx, newBeats)}

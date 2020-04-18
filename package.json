@@ -18,6 +18,7 @@
     "react-scripts": "3.4.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "shortid": "^2.2.15",
     "typescript": "~3.7.2"
   },
   "scripts": {
@@ -45,6 +46,7 @@
     "@types/howler": "^2.1.2",
     "@types/react-redux": "^7.1.7",
     "@types/redux-logger": "^3.0.7",
+    "@types/shortid": "^0.0.29",
     "redux-logger": "^3.0.6",
     "tslint": "^6.1.1",
     "typesafe-actions": "^5.1.0"

@@ -3,12 +3,13 @@ import { ELECTRIC_SUNRISE, JOLT_INTRO, JOLT_MID } from './songs';
 import { Song } from '../types/songTypes';
 
 const DEFAULT_GROUPING_DATA: GroupingData = {
+    id: '',
     beats: 4,
     noteValue: NoteValue.QUARTER
 };
 
 const DEFAULT_BAR_DATA: BarData = {
-    id: 0,
+    id: '',
     beats: 4,
     noteValue: NoteValue.QUARTER,
     groupings: [DEFAULT_GROUPING_DATA]

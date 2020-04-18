@@ -14,9 +14,10 @@ const makeJoltBars = (): BarData[] => {
         }
         data.push({
             beats,
-            id: i,
+            id: i.toString(),
             noteValue: NoteValue.SIXTEENTH,
             groupings: [{
+                id: i.toString(),
                 beats,
                 noteValue: NoteValue.SIXTEENTH
             }]
@@ -43,8 +44,9 @@ const makeJoltBars2 = (): BarData[] => {
         data.push({
             beats,
             noteValue,
-            id: i,
+            id: i.toString(),
             groupings: [{
+                id: i.toString(),
                 beats,
                 noteValue
             }]
@@ -56,18 +58,20 @@ const makeJoltBars2 = (): BarData[] => {
 const makeElectricSunriseBars = (): BarData[] => {
     const groupings: GroupingData[] = [];
     groupings.push({
+        id: '0',
         beats: 8,
         noteValue: NoteValue.DOTTED_EIGHTH
         // subdivision: 3
     });
     groupings.push({
+        id: '1',
         beats: 1,
         noteValue: NoteValue.EIGHTH
         // subdivision: 2
     });
     const bar: BarData = {
         groupings,
-        id: 0,
+        id: '0',
         noteValue: NoteValue.EIGHTH,
         beats: 13
     };

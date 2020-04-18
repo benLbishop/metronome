@@ -1,18 +1,17 @@
-import { Song  } from '../types/songTypes';
+import { getType } from 'typesafe-actions';
+import shortid from 'shortid';
+
+import { Song } from '../types/songTypes';
 import { constants } from '../config/constants';
 import { SongAction, songActions } from '../actions/songActions';
-import { getType } from 'typesafe-actions';
 import { getGroupingsBeatSum } from '../lib/bar';
 import { convertNoteValueToInt } from '../lib/noteValue';
 import { BarData } from '../types/barTypes';
 
-export interface SongState extends Song {
-    newBarId: number; // TODO: use some kind of id library
-}
+export interface SongState extends Song {}
 
 const initialState: SongState = {
-    ...constants.songs.DEFAULT_SONG,
-    newBarId: 1
+    ...constants.songs.DEFAULT_SONG
 };
 
 const SongReducer = (
@@ -42,13 +41,12 @@ const SongReducer = (
             const newBars = state.bars.slice();
             const newBar: BarData = {
                 ...constants.bars.DEFAULT_BAR_DATA,
-                id: state.newBarId
+                id: shortid.generate()
             };
             newBars.push(newBar);
             return {
                 ...state,
-                bars: newBars,
-                newBarId: state.newBarId + 1
+                bars: newBars
             };
         }
         case getType(songActions.removeBar): {
@@ -65,13 +63,14 @@ const SongReducer = (
             const newBars = state.bars.slice();
             const newBar: BarData = {
                 ...newBars[idx],
-                id: state.newBarId
+                id: shortid.generate()
             };
+            // TODO: do I need to update groupingIds? i don't think so, since keys only need
+            // to be unique among siblings. Could be problem if I use grouping ids for something else
             newBars.push(newBar);
             return {
                 ...state,
-                bars: newBars,
-                newBarId: state.newBarId + 1
+                bars: newBars
             };
         }
         case getType(songActions.updateBarNoteValue): {
@@ -91,9 +90,13 @@ const SongReducer = (
         }
         case getType(songActions.addGrouping): {
             const { barIdx } = action.payload;
+            const newGrouping = {
+                ...constants.bars.DEFAULT_GROUPING_DATA,
+                id: shortid.generate()
+            };
             const newBars = state.bars.slice();
             const targetBar = newBars[barIdx];
-            const newGroupings = [...targetBar.groupings, constants.bars.DEFAULT_GROUPING_DATA];
+            const newGroupings = [...targetBar.groupings, newGrouping];
             const groupingBeatSum = getGroupingsBeatSum(newGroupings);
             const newBarBeats = groupingBeatSum / convertNoteValueToInt(targetBar.noteValue);
             newBars[barIdx] = {
