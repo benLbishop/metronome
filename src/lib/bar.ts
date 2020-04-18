@@ -41,7 +41,7 @@ export const calculateNextBeatInfo = (
 };
 
 // TODO: figure out logic for matching grouping beats to bar beats
-export const checkIfBarFull = (bar: BarData): boolean => {
+const checkIfBarFull = (bar: BarData): boolean => {
     const targetNumBeats = bar.beats * convertNoteValueToInt(bar.noteValue);
 
     const groupingBeats = getGroupingsBeatSum(bar.groupings);

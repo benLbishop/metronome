@@ -29,12 +29,13 @@ interface Props {
   loadSong(songId: string): void;
 }
 
+// TODO: move
+const getSongNames = (): string[] => {
+  return constants.songs.SONG_LIST.map(song => song.name);
+};
+
 // TODO: display start/end bar indices starting from 1
 const LeftMenu: React.FC<Props> = (props) => {
-  // TODO: move
-  const getSongNames = (): string[] => {
-    return constants.songs.SONG_LIST.map(song => song.name);
-  };
 
   return (
     <div id='leftMenu'>

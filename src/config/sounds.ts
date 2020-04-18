@@ -27,7 +27,6 @@ const groupSound = new Howl({
     volume: 1
 });
 
-// TODO: test this/make sure it's doing what is expected
 export const playSound = (curBeat: number, curGroupingIdx: number, subdivision?: number) => {
     if (curBeat === 0) {
         if (curGroupingIdx === 0) {

@@ -6,7 +6,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { BarData, NoteValue } from '../../types/barTypes';
 import Bar from '../Bar';
 import { RootState } from '../../reducers';
-import { songActions, handleRemoveBar } from '../../actions/songActions';
+import { songActions, handleRemoveBar, handleCopyBar } from '../../actions/songActions';
 
 import './Metronome.scss';
 
@@ -56,7 +56,7 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, undefined, Action>) => {
   return {
     removeBar: (idx: number) => dispatch(handleRemoveBar(idx)),
-    copyBar: (idx: number) => dispatch(songActions.copyBar(idx)),
+    copyBar: (idx: number) => dispatch(handleCopyBar(idx)),
     updateBarNoteValue: (idx: number, newValue: NoteValue) => dispatch(songActions.updateBarNoteValue(idx, newValue)),
     addGrouping: (barIdx: number) => dispatch(songActions.addGrouping(barIdx)),
     removeGrouping: (barIdx: number, groupingIdx: number) => dispatch(songActions.removeGrouping(barIdx, groupingIdx)),

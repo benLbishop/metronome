@@ -61,9 +61,18 @@ const SongReducer = (
             };
         }
         case getType(songActions.copyBar): {
-            // TODO
-            console.log('copyBar not implemented');
-            return state;
+            const idx = action.payload.idx;
+            const newBars = state.bars.slice();
+            const newBar: BarData = {
+                ...newBars[idx],
+                id: state.newBarId
+            };
+            newBars.push(newBar);
+            return {
+                ...state,
+                bars: newBars,
+                newBarId: state.newBarId + 1
+            };
         }
         case getType(songActions.updateBarNoteValue): {
             const { idx, newNoteValue } = action.payload;

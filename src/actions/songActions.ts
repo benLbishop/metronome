@@ -86,6 +86,23 @@ export const handleAddBar = () => {
     };
 };
 
+// TODO this, handleAddBar, and handleRemoveBar are all similar and can probably be 1 fn
+export const handleCopyBar = (idx: number) => {
+    return (dispatch: ThunkDispatch<RootState, void, Action>, getState: () => RootState) => {
+        const numBars = getState().song.bars.length;
+        if (numBars === constants.bars.MAX_NUM_BARS) {
+            // TODO: pop up some alert
+            return;
+        }
+        dispatch(songActions.copyBar(idx));
+        const oldMaxBarIdx = numBars - 1;
+        const endingBarIdx = getState().metronome.endingBarIdx;
+        if (endingBarIdx === oldMaxBarIdx) {
+            dispatch(metronomeActions.updateEndingBarIdx(oldMaxBarIdx + 1));
+        }
+    };
+};
+
 export const handleRemoveBar = (idx: number) => {
     return (dispatch: ThunkDispatch<RootState, void, Action>, getState: () => RootState) => {
         const numBars = getState().song.bars.length;

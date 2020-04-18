@@ -2,7 +2,6 @@ import { metronomeActions, MetronomeAction } from '../actions/metronomeActions';
 import { getType } from 'typesafe-actions';
 import { SongAction, songActions } from '../actions/songActions';
 
-// TODO: break bar stuff into a separate reducer? curBeat depends on bar info, so maybe not
 export interface MetronomeState {
     playing: boolean;
     curBeat: number;
