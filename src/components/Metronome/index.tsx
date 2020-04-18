@@ -1,9 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+
+import { BarData, NoteValue } from '../../types/barTypes';
+import Bar from '../Bar';
+import { RootState } from '../../reducers';
+import { songActions, handleRemoveBar } from '../../actions/songActions';
 
 import './Metronome.scss';
-import { BarData, NoteValue } from '../../types/barTypes';
-
-import Bar from '../Bar';
 
 interface Props {
   bars: BarData[];
@@ -44,4 +49,24 @@ const Metronome: React.FC<Props> = (props: Props) => {
   );
 };
 
-export default Metronome;
+const mapStateToProps = (state: RootState) => ({
+  bars: state.song.bars
+});
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, undefined, Action>) => {
+  return {
+    removeBar: (idx: number) => dispatch(handleRemoveBar(idx)),
+    copyBar: (idx: number) => dispatch(songActions.copyBar(idx)),
+    updateBarNoteValue: (idx: number, newValue: NoteValue) => dispatch(songActions.updateBarNoteValue(idx, newValue)),
+    addGrouping: (barIdx: number) => dispatch(songActions.addGrouping(barIdx)),
+    removeGrouping: (barIdx: number, groupingIdx: number) => dispatch(songActions.removeGrouping(barIdx, groupingIdx)),
+    updateGroupingBeats: (barIdx: number, groupingIdx: number, newBeats: number) => dispatch(songActions.updateGroupingBeats(barIdx, groupingIdx, newBeats)),
+    updateGroupingNoteValue: (barIdx: number, groupingIdx: number, newValue: NoteValue) => dispatch(songActions.updateGroupingNoteValue(barIdx, groupingIdx, newValue)),
+    updateGroupingSubdivision: (barIdx: number, groupingIdx: number, newValue?: number) => dispatch(songActions.updateGroupingSubdivision(barIdx, groupingIdx, newValue))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Metronome);

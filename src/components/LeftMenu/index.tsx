@@ -1,11 +1,18 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+
 import { Tempo, NoteValue } from '../../types/barTypes';
 import SettingsBar from '../SettingsBar';
-
-import './LeftMenu.scss';
 import TextInput from '../TextInput';
 import { constants } from '../../config/constants';
 import SelectInput from '../SelectInput';
+
+import './LeftMenu.scss';
+import { RootState } from '../../reducers';
+import { songActions, handleAddBar, loadSong } from '../../actions/songActions';
+import { handleTogglePlay, handleUpdateStartingBarIdx, handleUpdateEndingBarIdx } from '../../actions/metronomeActions';
 
 interface Props {
   tempo: Tempo;
@@ -54,4 +61,31 @@ const LeftMenu: React.FC<Props> = (props) => {
   );
 };
 
-export default LeftMenu;
+const mapStateToProps = (state: RootState) => {
+  const met = state.metronome;
+  const song = state.song;
+  return {
+    tempo: song.tempo,
+    playing: met.playing,
+    startingBarIdx: met.startingBarIdx,
+    endingBarIdx: met.endingBarIdx,
+    curSongName: song.name
+  };
+};
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, undefined, Action>) => {
+  return {
+    togglePlay: () => dispatch(handleTogglePlay()),
+    updateBPM: (newBPM: number) => dispatch(songActions.updateBPM(newBPM)),
+    updateNoteValue: (newValue: NoteValue) => dispatch(songActions.updateNoteValue(newValue)),
+    updateStartingBarIdx: (newIdx: number) => dispatch(handleUpdateStartingBarIdx(newIdx)),
+    updateEndingBarIdx: (newIdx: number) => dispatch(handleUpdateEndingBarIdx(newIdx)),
+    addBar: () => dispatch(handleAddBar()),
+    loadSong: (songId: string) => dispatch(loadSong(songId))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LeftMenu);
