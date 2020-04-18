@@ -15,6 +15,7 @@ const Grouping: React.FC<Props> = (props: Props) => {
   return (
     <TimeSignature
       className={'grouping'}
+      textInputStyle={{ width: '80%', margin: '5% 0' }}
       beats={beats}
       noteValue={noteValue}
       updateBeats={props.updateBeats}

@@ -1,7 +1,7 @@
 import { createAction, ActionType } from 'typesafe-actions';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { convertNoteValueToInt, convertIntToNoteValue } from '../lib/noteValue';
+import { convertNoteValueToInt } from '../lib/noteValue';
 import { NoteValue } from '../types/barTypes';
 import { RootState } from '../reducers';
 import { playSound } from '../config/sounds';
@@ -86,30 +86,6 @@ export const startSound = () => {
             dispatch(startSound());
         }, noteDuration * 1000);
         dispatch(metronomeActions.updateCurBeat(timeout));
-    };
-};
-
-export const parseBarNoteValueUpdate = (idx: number, newValue: number) => {
-    return (dispatch: ThunkDispatch<RootState, void, Action>, getState: () => RootState) => {
-        // TODO: validation
-        const newNoteValue = convertIntToNoteValue(newValue);
-        dispatch(metronomeActions.updateBarNoteValue(idx, newNoteValue));
-    };
-};
-
-export const parseGroupingNoteValueUpdate = (barIdx: number, groupingIdx: number, newValue: number) => {
-    return (dispatch: ThunkDispatch<RootState, void, Action>, getState: () => RootState) => {
-        // TODO: validation
-        const newNoteValue = convertIntToNoteValue(newValue);
-        dispatch(metronomeActions.updateGroupingNoteValue(barIdx, groupingIdx, newNoteValue));
-    };
-};
-
-export const updateTempoNoteValue = (newValue: number) => {
-    return (dispatch: ThunkDispatch<RootState, void, Action>, getState: () => RootState) => {
-        // TODO: validation
-        const newNoteValue = convertIntToNoteValue(newValue);
-        dispatch(metronomeActions.updateNoteValue(newNoteValue));
     };
 };
 

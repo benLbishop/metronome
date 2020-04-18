@@ -6,13 +6,7 @@ import './App.scss';
 import Metronome from '../Metronome';
 import { RootState } from '../../reducers';
 import { BarData, Tempo, NoteValue } from '../../types/barTypes';
-import {
-  metronomeActions,
-  handleTogglePlay,
-  parseGroupingNoteValueUpdate,
-  parseBarNoteValueUpdate,
-  updateTempoNoteValue
-} from '../../actions/metronomeActions';
+import { metronomeActions, handleTogglePlay } from '../../actions/metronomeActions';
 
 // TODO add testing
 // TODO styling

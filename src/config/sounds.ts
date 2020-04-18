@@ -3,7 +3,6 @@ import highClick from '../res/sounds/highclick.wav';
 import lowClick from '../res/sounds/lowclick.wav';
 import subdivClick from '../res/sounds/subdiv.wav';
 import groupClick from '../res/sounds/group.wav';
-import { GroupingData } from '../types/barTypes';
 
 // TODO: idk where these go or what the best way/time to load them is
 // TODO: add error handling for loading/playing these

@@ -28,3 +28,5 @@ Ok....now it's yelling at me even though I deleted the file. I no longer know wh
 
 ## CSS Stuff
 Inputs are weird, and browsers give them a default width. This was leading to my styling on the input of `flex: 1` not changing the width of the input at all. To fix this, I had to explicitly set the width to 100% for flex to work. I think it might be only along the cross-axis of the flex-direction that the size doesn't change, and for inputs that you want to shrink. The inputs were fine when I wanted them to grow with flex, just not shrink, because a min-width must have been set as well.
+
+My inputs are still behaving strangely, even with the above fix. They're slightly going past the right of their parent container; I think this has something to do with the default border stylings that are given.

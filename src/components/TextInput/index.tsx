@@ -4,6 +4,7 @@ import { KeyCodes } from '../../types/htmlTypes';
 
 interface Props {
   value: number;
+  style?: React.CSSProperties;
   updateValue(newValue: number): void;
 }
 
@@ -58,6 +59,7 @@ const TextInput: React.FC<Props> = (props: Props) => {
   return (
       <input
         className='textInput'
+        style={props.style}
         type='text'
         value={getDisplayValue()}
         onChange={handleTextChange}
