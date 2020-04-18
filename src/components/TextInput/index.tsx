@@ -10,6 +10,7 @@ interface Props {
 
 // TODO: make component generic? Right now this can only be a text input for numbers,
 // and that isn't clear at all by the component name
+// TODO: try out Formik?
 const TextInput: React.FC<Props> = (props: Props) => {
 
   const inputRef: React.MutableRefObject<HTMLInputElement> = useRef(null);

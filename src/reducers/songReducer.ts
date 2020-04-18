@@ -181,6 +181,12 @@ const SongReducer = (
                 bars: newBars
             };
         }
+        case getType(songActions.songLoaded): {
+            return {
+                ...state,
+                ...action.payload.song
+            };
+        }
         default: {
             return state;
         }

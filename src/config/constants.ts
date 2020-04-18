@@ -37,8 +37,10 @@ export const constants = {
     },
     songs: {
         DEFAULT_SONG,
-        ELECTRIC_SUNRISE,
-        JOLT_INTRO,
-        JOLT_MID
+        SONG_LIST: [
+            ELECTRIC_SUNRISE,
+            JOLT_INTRO,
+            JOLT_MID
+        ]
     }
 };

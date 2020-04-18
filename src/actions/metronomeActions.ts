@@ -6,15 +6,14 @@ import { BarData } from '../types/barTypes';
 import { RootState } from '../reducers';
 import { playSound } from '../config/sounds';
 
-// TODO: separate these into beat and grouping action files
-const TOGGLE_PLAY = 'TOGGLE_PLAY';
+const TOGGLE_PLAYING = 'TOGGLE_PLAY';
 const UPDATE_CUR_BEAT = 'UPDATE_CUR_BEAT';
 const UPDATE_STARTING_BAR_IDX = 'UPDATE_STARTING_BAR_IDX';
 const UPDATE_ENDING_BAR_IDX = 'UPDATE_ENDING_BAR_IDX';
 const CANCEL_CUR_TIMEOUT = 'CANCEL_CUR_TIMEOUT';
 
 export const metronomeActions = {
-    togglePlay: createAction(TOGGLE_PLAY)(),
+    togglePlaying: createAction(TOGGLE_PLAYING)(),
     updateCurBeat: createAction(
         UPDATE_CUR_BEAT,
         (timeout: NodeJS.Timeout, newBeat: number, newBarIdx: number, newGroupingIdx: number) => ({
@@ -38,18 +37,23 @@ export const metronomeActions = {
 export type MetronomeAction = ActionType<typeof metronomeActions>;
 
 // TODO: clean up
-export const startSound = () => {
+const startMetronome = () => {
     return (dispatch: ThunkDispatch<RootState, void, Action>, getState: () => RootState) => {
         const { curBarIdx, curBeat, curGroupingIdx, startingBarIdx, endingBarIdx } = getState().metronome;
         const { bars, tempo } = getState().song;
         const curBar = bars[curBarIdx];
-        let noteDuration: number;
-
         const curGrouping = curBar.groupings[curGroupingIdx];
+
         playSound(curBeat, curGroupingIdx, curGrouping.subdivision);
-        const noteValueRatio = convertNoteValueToInt(tempo.noteValue) / convertNoteValueToInt(curGrouping.noteValue);
-        const subdivisionMultiplier = curGrouping.subdivision ? curGrouping.subdivision : 1;
-        noteDuration = (60 / tempo.bpm) / (noteValueRatio * subdivisionMultiplier);
+
+        // set up the timeout to call this function again based on the current
+        const noteValueRatio = convertNoteValueToInt(curGrouping.noteValue) / convertNoteValueToInt(tempo.noteValue);
+        const subdivisionFactor = curGrouping.subdivision ? curGrouping.subdivision : 1;
+        const noteDuration = (60 / tempo.bpm) * noteValueRatio / subdivisionFactor;
+
+        const timeout = setTimeout(() => {
+            dispatch(startMetronome());
+        }, noteDuration * 1000);
 
         // TODO: this is yucky
         const nextBeatInfo = calculateNextBeatInfo(
@@ -61,11 +65,14 @@ export const startSound = () => {
             endingBarIdx
         );
 
-        const timeout = setTimeout(() => {
-            dispatch(startSound());
-        }, noteDuration * 1000);
-
         dispatch(metronomeActions.updateCurBeat(timeout, nextBeatInfo.newBeat, nextBeatInfo.newBarIdx, nextBeatInfo.newGroupingIdx));
+    };
+};
+
+// TODO: sort of unecessary if it just dispatches another function
+export const stopMetronome = () => {
+    return (dispatch: ThunkDispatch<RootState, void, Action>) => {
+        dispatch(metronomeActions.cancelCurTimeout());
     };
 };
 
@@ -112,11 +119,11 @@ export const handleTogglePlay = () => {
     return (dispatch: ThunkDispatch<RootState, void, Action>, getState: () => RootState) => {
         const playing = getState().metronome.playing;
         if (playing) {
-            dispatch(metronomeActions.cancelCurTimeout());
+            dispatch(stopMetronome());
         } else {
-            dispatch(startSound());
+            dispatch(startMetronome());
         }
-        dispatch(metronomeActions.togglePlay());
+        dispatch(metronomeActions.togglePlaying());
     };
 };
 

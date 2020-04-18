@@ -21,12 +21,13 @@ const initialState: MetronomeState = {
     endingBarIdx: 0
 };
 
+// TODO: try new typesafe-actions createReducer?
 const MetronomeReducer = (
     state: MetronomeState = initialState,
     action: MetronomeAction
 ): MetronomeState => {
     switch (action.type) {
-        case getType(metronomeActions.togglePlay): {
+        case getType(metronomeActions.togglePlaying): {
             return {
                 ...state,
                 playing: !state.playing

@@ -4,8 +4,10 @@ import { ThunkDispatch } from 'redux-thunk';
 
 import { NoteValue } from '../types/barTypes';
 import { RootState } from '../reducers';
-import { metronomeActions } from './metronomeActions';
+import { metronomeActions, stopMetronome } from './metronomeActions';
 import { constants } from '../config/constants';
+import { Song } from '../types/songTypes';
+import { getSongById } from '../lib/song';
 
 const UPDATE_BPM = 'UPDATE_BPM';
 const UPDATE_NOTE_VALUE = 'UPDATE_NOTE_VALUE';
@@ -18,6 +20,7 @@ const REMOVE_GROUPING = 'REMOVE_GROUPING';
 const UPDATE_GROUPING_BEATS = 'UPDATE_GROUPING_BEATS';
 const UPDATE_GROUPING_NOTE_VALUE = 'UPDATE_GROUPING_NOTE_VALUE';
 const UPDATE_GROUPING_SUBDIVISION = 'UPDATE_GROUPING_SUBDIVISION';
+const SONG_LOADED = 'SONG_LOADED';
 
 export const songActions = {
     updateBPM: createAction(
@@ -60,6 +63,10 @@ export const songActions = {
     updateGroupingSubdivision: createAction(
         UPDATE_GROUPING_SUBDIVISION,
         (barIdx: number, groupingIdx: number, newValue?: number) => ({ barIdx, groupingIdx, newValue })
+    )(),
+    songLoaded: createAction(
+        SONG_LOADED,
+        (song: Song) => ({ song })
     )()
 };
 
@@ -91,6 +98,19 @@ export const handleRemoveBar = (idx: number) => {
         const endingBarIdx = getState().metronome.endingBarIdx;
         if (endingBarIdx === oldMaxBarIdx) {
             dispatch(metronomeActions.updateEndingBarIdx(oldMaxBarIdx - 1));
+        }
+    };
+};
+
+export const loadSong = (songId: string) => {
+    return (dispatch: ThunkDispatch<RootState, void, Action>) => {
+        dispatch(stopMetronome());
+        try {
+            const song = getSongById(songId);
+            dispatch(songActions.songLoaded(song));
+        } catch (err) {
+            // TODO
+            console.log(err);
         }
     };
 };
