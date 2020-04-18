@@ -1,6 +1,5 @@
 import React from 'react';
-import { GroupingData } from '../../types/barTypes';
-import { convertNoteValueToInt } from '../../lib/noteValue';
+import { GroupingData, NoteValue } from '../../types/barTypes';
 
 import './Grouping.scss';
 import TimeSignature from '../TimeSignature';
@@ -8,17 +7,16 @@ import TimeSignature from '../TimeSignature';
 interface Props {
   grouping: GroupingData;
   updateBeats(newBeats: number): void;
-  updateNoteValue(newValue: number): void;
+  updateNoteValue(newValue: NoteValue): void;
 }
 
 const Grouping: React.FC<Props> = (props: Props) => {
   const { beats, noteValue } = props.grouping;
-  const noteValueInt = convertNoteValueToInt(noteValue);
   return (
     <TimeSignature
       className={'grouping'}
       beats={beats}
-      noteValueInt={noteValueInt}
+      noteValue={noteValue}
       updateBeats={props.updateBeats}
       updateNoteValue={props.updateNoteValue}
     />

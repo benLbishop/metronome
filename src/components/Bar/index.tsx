@@ -1,17 +1,16 @@
 import React from 'react';
 
 import './Bar.scss';
-import { BarData } from '../../types/barTypes';
-import { convertNoteValueToInt } from '../../lib/noteValue';
+import { BarData, NoteValue } from '../../types/barTypes';
 import GroupingsContainer from '../GroupingsContainer';
 import TimeSignature from '../TimeSignature';
 
 interface Props {
   bar: BarData;
   updateBeats(beats: number): void;
-  updateNoteValue(noteValue: number): void;
+  updateNoteValue(noteValue: NoteValue): void;
   updateGroupingBeats(idx: number, beats: number): void;
-  updateGroupingNoteValue(idx: number, noteValue: number): void;
+  updateGroupingNoteValue(idx: number, noteValue: NoteValue): void;
   remove(): void;
   addGrouping(): void;
   copy(): void;
@@ -20,7 +19,6 @@ interface Props {
 // TODO: make button row a component?
 const Bar: React.FC<Props> = (props: Props) => {
   const { noteValue, beats, groupings } = props.bar;
-  const noteValueInt = convertNoteValueToInt(noteValue);
 
   return (
     <div className='bar'>
@@ -28,7 +26,7 @@ const Bar: React.FC<Props> = (props: Props) => {
         <TimeSignature
           className={'timeSignature'}
           beats={beats}
-          noteValueInt={noteValueInt}
+          noteValue={noteValue}
           updateBeats={props.updateBeats}
           updateNoteValue={props.updateNoteValue}
         />

@@ -5,7 +5,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import './App.scss';
 import Metronome from '../Metronome';
 import { RootState } from '../../reducers';
-import { BarData, Tempo } from '../../types/barTypes';
+import { BarData, Tempo, NoteValue } from '../../types/barTypes';
 import {
   metronomeActions,
   handleTogglePlay,
@@ -29,15 +29,15 @@ interface Props {
   playing: boolean;
   togglePlay(): void;
   updateBPM(newBPM: number): void;
-  updateNoteValue(newValue: number): void;
+  updateNoteValue(newValue: NoteValue): void;
   addBar(): void;
   removeBar(idx: number): void;
   copyBar(idx: number): void;
   updateBarBeats(idx: number, newBeats: number): void;
-  updateBarNoteValue(idx: number, newValue: number): void;
+  updateBarNoteValue(idx: number, newValue: NoteValue): void;
   addGrouping(barIdx: number): void;
   updateGroupingBeats(barIdx: number, groupingIdx: number, newBeats: number): void;
-  updateGroupingNoteValue(barIdx: number, groupingIdx: number, newNoteValue: number): void;
+  updateGroupingNoteValue(barIdx: number, groupingIdx: number, newValue: NoteValue): void;
 }
 
 const App: React.FC<Props> = (props: Props) => {
@@ -62,15 +62,15 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, undefined, Action
   return {
     togglePlay: () => dispatch(handleTogglePlay()),
     updateBPM: (newBPM: number) => dispatch(metActs.updateBPM(newBPM)),
-    updateNoteValue: (newValue: number) => dispatch(updateTempoNoteValue(newValue)),
+    updateNoteValue: (newValue: NoteValue) => dispatch(metActs.updateNoteValue(newValue)),
     addBar: () => dispatch(metActs.addBar()),
     removeBar: (idx: number) => dispatch(metActs.removeBar(idx)),
     copyBar: (idx: number) => dispatch(metActs.copyBar(idx)),
     updateBarBeats: (idx: number, newBeats: number) => dispatch(metActs.updateBarBeats(idx, newBeats)),
-    updateBarNoteValue: (idx: number, newValue: number) => dispatch(parseBarNoteValueUpdate(idx, newValue)),
+    updateBarNoteValue: (idx: number, newValue: NoteValue) => dispatch(metActs.updateBarNoteValue(idx, newValue)),
     addGrouping: (barIdx: number) => dispatch(metActs.addGrouping(barIdx)),
     updateGroupingBeats: (barIdx: number, groupingIdx: number, newBeats: number) => dispatch(metActs.updateGroupingBeats(barIdx, groupingIdx, newBeats)),
-    updateGroupingNoteValue: (barIdx: number, groupingIdx: number, newValue: number) => dispatch(parseGroupingNoteValueUpdate(barIdx, groupingIdx, newValue))
+    updateGroupingNoteValue: (barIdx: number, groupingIdx: number, newValue: NoteValue) => dispatch(metActs.updateGroupingNoteValue(barIdx, groupingIdx, newValue))
   };
 };
 

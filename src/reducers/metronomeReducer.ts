@@ -2,7 +2,7 @@ import { metronomeActions, MetronomeAction } from '../actions/metronomeActions';
 import { getType } from 'typesafe-actions';
 import { BarData, GroupingData, NoteValue, Tempo } from '../types/barTypes';
 import { checkIfBarFull } from '../lib/bar';
-import { makeElectricSunrise } from '../config/songs';
+import { makeElectricSunrise, makeJolt } from '../config/songs';
 
 // TODO: move to constants
 const DEFAULT_GROUPING_DATA: GroupingData = {

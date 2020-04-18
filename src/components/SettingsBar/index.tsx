@@ -2,8 +2,9 @@ import React from 'react';
 import TextInput from '../TextInput';
 
 import './SettingsBar.scss';
-import { Tempo } from '../../types/barTypes';
-import { convertNoteValueToInt } from '../../lib/noteValue';
+import { Tempo, NoteValue } from '../../types/barTypes';
+import SelectInput from '../SelectInput';
+import { constants } from '../../config/constants';
 
 interface Props {
     tempo: Tempo;
@@ -11,18 +12,17 @@ interface Props {
     togglePlay(): void;
     addBar(): void;
     updateBPM(bpm: number): void;
-    updateNoteValue(newValue: number): void;
+    updateNoteValue(newValue: NoteValue): void;
 }
 
 const SettingsBar: React.FC<Props> = (props: Props) => {
-  const noteValueInt = convertNoteValueToInt(props.tempo.noteValue);
   return (
     <div className='settingsBar'>
       <button onClick={props.addBar}>Add Bar</button>
       <button className='playButton' onMouseDown={props.togglePlay}>{props.playing ? 'stop' : 'start'}</button>
       <div className='stdP'>BPM:</div>
       <TextInput value={props.tempo.bpm} updateValue={props.updateBPM}/>
-      <TextInput value={noteValueInt} updateValue={props.updateNoteValue}/>
+      <SelectInput selectedValue={props.tempo.noteValue} values={constants.notes.NOTE_VALUE_LIST} updateValue={props.updateNoteValue}/>
     </div>
   );
 };

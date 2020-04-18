@@ -1,5 +1,5 @@
 import React from 'react';
-import { GroupingData } from '../../types/barTypes';
+import { GroupingData, NoteValue } from '../../types/barTypes';
 import Grouping from '../Grouping';
 
 import './GroupingsContainer.scss';
@@ -7,7 +7,7 @@ import './GroupingsContainer.scss';
 interface Props {
   groupings: GroupingData[];
   updateBeats(idx: number, newBeats: number): void;
-  updateNoteValue(idx: number, newValue: number): void;
+  updateNoteValue(idx: number, newValue: NoteValue): void;
 }
 
 const GroupingsContainer: React.FC<Props> = (props: Props) => {
@@ -18,7 +18,7 @@ const GroupingsContainer: React.FC<Props> = (props: Props) => {
         key={`grouping${idx}`}
         grouping={grouping}
         updateBeats={(newBeats: number) => props.updateBeats(idx, newBeats)}
-        updateNoteValue={(newValue: number) => props.updateNoteValue(idx, newValue)}
+        updateNoteValue={(newValue: NoteValue) => props.updateNoteValue(idx, newValue)}
       />
     );
   });

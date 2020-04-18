@@ -3,8 +3,12 @@ export enum NoteValue {
     HALF = 'HALF',
     QUARTER = 'QUARTER',
     EIGHTH = 'EIGHTH',
+    DOTTED_EIGHTH = 'DOTTED_EIGHTH', // TODO: make dotted function of some sort
     SIXTEENTH = 'SIXTEENTH',
-    DOTTED_EIGHTH = 'DOTTED_EIGHTH' // TODO: make dotted function of some sort
+    THIRTY_SECOND = 'THIRTY_SECOND',
+    SIXTY_FOURTH = 'SIXTY_FOURTH',
+    ONE_TWENTY_EIGHTH = 'ONE_TWENTY_EIGHTH',
+    TWO_FIFTY_SIXTH = 'TWO_FIFTY_SIXTH'
 }
 
 // TODO: figure out why the heck my compiler was getting mad because of my index.ts in the types folder
