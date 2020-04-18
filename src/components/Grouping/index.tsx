@@ -6,6 +6,7 @@ import TimeSignature from '../TimeSignature';
 
 interface Props {
   grouping: GroupingData;
+  remove(): void;
   updateBeats(newBeats: number): void;
   updateNoteValue(newValue: NoteValue): void;
 }
@@ -13,15 +14,18 @@ interface Props {
 const Grouping: React.FC<Props> = (props: Props) => {
   const { beats, noteValue } = props.grouping;
   return (
-    <TimeSignature
-      className={'grouping'}
-      textInputStyle={{ width: '80%', height: '20%', margin: '5% 0' }}
-      noteValueStyle={{ height: '20%', width: '80%'}}
-      beats={beats}
-      noteValue={noteValue}
-      updateBeats={props.updateBeats}
-      updateNoteValue={props.updateNoteValue}
-    />
+    <div className={'grouping'}>
+      <TimeSignature
+        className={'grouping'}
+        textInputStyle={{ width: '80%', height: '20%', margin: '5% 0' }}
+        noteValueStyle={{ height: '20%', width: '80%'}}
+        beats={beats}
+        noteValue={noteValue}
+        updateBeats={props.updateBeats}
+        updateNoteValue={props.updateNoteValue}
+      />
+      <button onClick={props.remove}>Remove</button>
+    </div>
   );
 };
 

@@ -161,6 +161,21 @@ const MetronomeReducer = (
                 bars: newBars
             };
         }
+        case getType(metronomeActions.removeGrouping): {
+            const { barIdx, groupingIdx } = action.payload;
+            const newBars = state.bars.slice();
+            const targetBar = newBars[barIdx];
+            const newGroupings = targetBar.groupings.slice();
+            newGroupings.splice(groupingIdx, 1);
+            newBars[barIdx] = {
+                ...newBars[barIdx],
+                groupings: newGroupings
+            };
+            return {
+                ...state,
+                bars: newBars
+            };
+        }
         case getType(metronomeActions.updateGroupingBeats): {
             const { barIdx, groupingIdx, newBeats } = action.payload;
             const newBars = state.bars.slice();

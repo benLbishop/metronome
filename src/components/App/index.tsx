@@ -30,6 +30,7 @@ interface Props {
   updateBarBeats(idx: number, newBeats: number): void;
   updateBarNoteValue(idx: number, newValue: NoteValue): void;
   addGrouping(barIdx: number): void;
+  removeGrouping(barIdx: number, groupingIdx: number): void;
   updateGroupingBeats(barIdx: number, groupingIdx: number, newBeats: number): void;
   updateGroupingNoteValue(barIdx: number, groupingIdx: number, newValue: NoteValue): void;
 }
@@ -63,6 +64,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, undefined, Action
     updateBarBeats: (idx: number, newBeats: number) => dispatch(metActs.updateBarBeats(idx, newBeats)),
     updateBarNoteValue: (idx: number, newValue: NoteValue) => dispatch(metActs.updateBarNoteValue(idx, newValue)),
     addGrouping: (barIdx: number) => dispatch(metActs.addGrouping(barIdx)),
+    removeGrouping: (barIdx: number, groupingIdx: number) => dispatch(metActs.removeGrouping(barIdx, groupingIdx)),
     updateGroupingBeats: (barIdx: number, groupingIdx: number, newBeats: number) => dispatch(metActs.updateGroupingBeats(barIdx, groupingIdx, newBeats)),
     updateGroupingNoteValue: (barIdx: number, groupingIdx: number, newValue: NoteValue) => dispatch(metActs.updateGroupingNoteValue(barIdx, groupingIdx, newValue))
   };

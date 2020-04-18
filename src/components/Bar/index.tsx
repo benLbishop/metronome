@@ -13,6 +13,7 @@ interface Props {
   updateGroupingNoteValue(idx: number, noteValue: NoteValue): void;
   remove(): void;
   addGrouping(): void;
+  removeGrouping(idx: number): void;
   copy(): void;
 }
 
@@ -34,6 +35,7 @@ const Bar: React.FC<Props> = (props: Props) => {
         />
         <GroupingsContainer
           groupings={groupings}
+          removeGrouping={props.removeGrouping}
           updateBeats={props.updateGroupingBeats}
           updateNoteValue={props.updateGroupingNoteValue}
         />

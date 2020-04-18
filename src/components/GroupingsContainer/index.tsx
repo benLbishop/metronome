@@ -6,6 +6,7 @@ import './GroupingsContainer.scss';
 
 interface Props {
   groupings: GroupingData[];
+  removeGrouping(idx: number): void;
   updateBeats(idx: number, newBeats: number): void;
   updateNoteValue(idx: number, newValue: NoteValue): void;
 }
@@ -17,6 +18,7 @@ const GroupingsContainer: React.FC<Props> = (props: Props) => {
       <Grouping
         key={`grouping${idx}`}
         grouping={grouping}
+        remove={() => props.removeGrouping(idx)}
         updateBeats={(newBeats: number) => props.updateBeats(idx, newBeats)}
         updateNoteValue={(newValue: NoteValue) => props.updateNoteValue(idx, newValue)}
       />

@@ -17,6 +17,7 @@ const COPY_BAR = 'COPY_BAR';
 const UPDATE_BAR_BEATS = 'UPDATE_BAR_BEATS';
 const UPDATE_BAR_NOTE_VALUE = 'UPDATE_BAR_NOTE_VALUE';
 const ADD_GROUPING = 'ADD_GROUPING';
+const REMOVE_GROUPING = 'REMOVE_GROUPING';
 const UPDATE_GROUPING_BEATS = 'UPDATE_GROUPING_BEATS';
 const UPDATE_GROUPING_NOTE_VALUE = 'UPDATE_GROUPING_NOTE_VALUE';
 const CANCEL_CUR_TIMEOUT = 'CANCEL_CUR_TIMEOUT';
@@ -55,6 +56,10 @@ export const metronomeActions = {
     addGrouping: createAction(
         ADD_GROUPING,
         (barIdx: number) => ({ barIdx })
+    )(),
+    removeGrouping: createAction(
+        REMOVE_GROUPING,
+        (barIdx: number, groupingIdx: number) => ({ barIdx, groupingIdx })
     )(),
     updateGroupingBeats: createAction(
         UPDATE_GROUPING_BEATS,
