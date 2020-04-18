@@ -4,10 +4,12 @@ import { LoggerPredicate, createLogger } from 'redux-logger';
 
 import { RootState } from '../reducers';
 import MetronomeReducer from '../reducers/metronomeReducer';
+import SongReducer from '../reducers/songReducer';
 
 // TODO: add redux persist
 const rootReducer = combineReducers({
-    metronome: MetronomeReducer
+    metronome: MetronomeReducer,
+    song: SongReducer
 });
 
 const logActionFilter: LoggerPredicate = (getState: () => RootState, action: any) => {

@@ -8,32 +8,13 @@ import { playSound } from '../config/sounds';
 
 // TODO: separate these into beat and grouping action files
 const TOGGLE_PLAY = 'TOGGLE_PLAY';
-const UPDATE_BPM = 'UPDATE_BPM';
-const UPDATE_NOTE_VALUE = 'UPDATE_NOTE_VALUE';
 const UPDATE_CUR_BEAT = 'UPDATE_CUR_BEAT';
 const UPDATE_STARTING_BAR_IDX = 'UPDATE_STARTING_BAR_IDX';
 const UPDATE_ENDING_BAR_IDX = 'UPDATE_ENDING_BAR_IDX';
-const ADD_BAR = 'ADD_BAR';
-const REMOVE_BAR = 'REMOVE_BAR';
-const COPY_BAR = 'COPY_BAR';
-const UPDATE_BAR_NOTE_VALUE = 'UPDATE_BAR_NOTE_VALUE';
-const ADD_GROUPING = 'ADD_GROUPING';
-const REMOVE_GROUPING = 'REMOVE_GROUPING';
-const UPDATE_GROUPING_BEATS = 'UPDATE_GROUPING_BEATS';
-const UPDATE_GROUPING_NOTE_VALUE = 'UPDATE_GROUPING_NOTE_VALUE';
-const UPDATE_GROUPING_SUBDIVISION = 'UPDATE_GROUPING_SUBDIVISION';
 const CANCEL_CUR_TIMEOUT = 'CANCEL_CUR_TIMEOUT';
 
 export const metronomeActions = {
     togglePlay: createAction(TOGGLE_PLAY)(),
-    updateBPM: createAction(
-        UPDATE_BPM,
-        (newBPM: number) => ({ newBPM })
-    )(),
-    updateNoteValue: createAction(
-        UPDATE_NOTE_VALUE,
-        (newValue: NoteValue) => ({ newValue })
-    )(),
     updateCurBeat: createAction(
         UPDATE_CUR_BEAT,
         (timeout: NodeJS.Timeout, newBeat: number, newBarIdx: number, newGroupingIdx: number) => ({
@@ -51,39 +32,6 @@ export const metronomeActions = {
         UPDATE_ENDING_BAR_IDX,
         (newIdx: number) => ({ newIdx })
     )(),
-    addBar: createAction(ADD_BAR)(),
-    removeBar: createAction(
-        REMOVE_BAR,
-        (idx: number) => ({ idx })
-    )(),
-    copyBar: createAction(
-        COPY_BAR,
-        (idx: number) => ({ idx })
-    )(),
-    updateBarNoteValue: createAction(
-        UPDATE_BAR_NOTE_VALUE,
-        (idx: number, newNoteValue: NoteValue) => ({ idx, newNoteValue })
-    )(),
-    addGrouping: createAction(
-        ADD_GROUPING,
-        (barIdx: number) => ({ barIdx })
-    )(),
-    removeGrouping: createAction(
-        REMOVE_GROUPING,
-        (barIdx: number, groupingIdx: number) => ({ barIdx, groupingIdx })
-    )(),
-    updateGroupingBeats: createAction(
-        UPDATE_GROUPING_BEATS,
-        (barIdx: number, groupingIdx: number, newBeats: number) => ({ barIdx, groupingIdx, newBeats })
-    )(),
-    updateGroupingNoteValue: createAction(
-        UPDATE_GROUPING_NOTE_VALUE,
-        (barIdx: number, groupingIdx: number, newNoteValue: NoteValue) => ({ barIdx, groupingIdx, newNoteValue })
-    )(),
-    updateGroupingSubdivision: createAction(
-        UPDATE_GROUPING_SUBDIVISION,
-        (barIdx: number, groupingIdx: number, newValue?: number) => ({ barIdx, groupingIdx, newValue })
-    )(),
     cancelCurTimeout: createAction(CANCEL_CUR_TIMEOUT)()
 };
 
@@ -92,7 +40,8 @@ export type MetronomeAction = ActionType<typeof metronomeActions>;
 // TODO: clean up
 export const startSound = () => {
     return (dispatch: ThunkDispatch<RootState, void, Action>, getState: () => RootState) => {
-        const { tempo, curBarIdx, bars, curBeat, curGroupingIdx } = getState().metronome;
+        const { curBarIdx, curBeat, curGroupingIdx, startingBarIdx, endingBarIdx } = getState().metronome;
+        const { bars, tempo } = getState().song;
         const curBar = bars[curBarIdx];
         let noteDuration: number;
 
@@ -102,7 +51,15 @@ export const startSound = () => {
         const subdivisionMultiplier = curGrouping.subdivision ? curGrouping.subdivision : 1;
         noteDuration = (60 / tempo.bpm) / (noteValueRatio * subdivisionMultiplier);
 
-        const nextBeatInfo = calculateNextBeatInfo(getState().metronome);
+        // TODO: this is yucky
+        const nextBeatInfo = calculateNextBeatInfo(
+            curBeat,
+            bars,
+            curBarIdx,
+            curGroupingIdx,
+            startingBarIdx,
+            endingBarIdx
+        );
 
         const timeout = setTimeout(() => {
             dispatch(startSound());
@@ -113,19 +70,18 @@ export const startSound = () => {
 };
 
 // TODO: this is yucky
-const calculateNextBeatInfo = (prevBeatInfo: {
+const calculateNextBeatInfo = (
     curBeat: number,
     bars: BarData[],
     curBarIdx: number,
     curGroupingIdx: number,
     startingBarIdx: number,
     endingBarIdx: number
-}): {
+): {
     newBeat: number,
     newBarIdx: number,
     newGroupingIdx: number
 } => {
-    const { curBeat, bars, curBarIdx, curGroupingIdx, startingBarIdx, endingBarIdx} = prevBeatInfo;
     let newBeat = curBeat + 1;
     let newBarIdx = curBarIdx;
     let newGroupingIdx = curGroupingIdx;

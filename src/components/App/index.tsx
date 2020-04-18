@@ -7,8 +7,8 @@ import Metronome from '../Metronome';
 import { RootState } from '../../reducers';
 import { BarData, Tempo, NoteValue } from '../../types/barTypes';
 import { metronomeActions, handleTogglePlay } from '../../actions/metronomeActions';
-import SettingsBar from '../SettingsBar';
 import LeftMenu from '../LeftMenu';
+import { songActions, handleAddBar, handleRemoveBar } from '../../actions/songActions';
 
 // TODO add testing
 // TODO styling
@@ -17,6 +17,7 @@ import LeftMenu from '../LeftMenu';
 // TODO: add saving/loading songs functionality
 // TODO: count ins
 // TODO: key shortcuts
+// TODO: double renders/things over rendering in general
 
 interface Props {
   bars: BarData[];
@@ -72,9 +73,10 @@ const App: React.FC<Props> = (props: Props) => {
 
 const mapStateToProps = (state: RootState) => {
   const met = state.metronome;
+  const song = state.song;
   return {
-    bars: met.bars,
-    tempo: met.tempo,
+    bars: song.bars,
+    tempo: song.tempo,
     playing: met.playing,
     startingBarIdx: met.startingBarIdx,
     endingBarIdx: met.endingBarIdx
@@ -83,21 +85,22 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, undefined, Action>) => {
   const metActs = metronomeActions;
+  const songActs = songActions;
   return {
     togglePlay: () => dispatch(handleTogglePlay()),
-    updateBPM: (newBPM: number) => dispatch(metActs.updateBPM(newBPM)),
-    updateNoteValue: (newValue: NoteValue) => dispatch(metActs.updateNoteValue(newValue)),
+    updateBPM: (newBPM: number) => dispatch(songActs.updateBPM(newBPM)),
+    updateNoteValue: (newValue: NoteValue) => dispatch(songActs.updateNoteValue(newValue)),
     updateStartingBarIdx: (newIdx: number) => dispatch(metActs.updateStartingBarIdx(newIdx)),
     updateEndingBarIdx: (newIdx: number) => dispatch(metActs.updateEndingBarIdx(newIdx)),
-    addBar: () => dispatch(metActs.addBar()),
-    removeBar: (idx: number) => dispatch(metActs.removeBar(idx)),
-    copyBar: (idx: number) => dispatch(metActs.copyBar(idx)),
-    updateBarNoteValue: (idx: number, newValue: NoteValue) => dispatch(metActs.updateBarNoteValue(idx, newValue)),
-    addGrouping: (barIdx: number) => dispatch(metActs.addGrouping(barIdx)),
-    removeGrouping: (barIdx: number, groupingIdx: number) => dispatch(metActs.removeGrouping(barIdx, groupingIdx)),
-    updateGroupingBeats: (barIdx: number, groupingIdx: number, newBeats: number) => dispatch(metActs.updateGroupingBeats(barIdx, groupingIdx, newBeats)),
-    updateGroupingNoteValue: (barIdx: number, groupingIdx: number, newValue: NoteValue) => dispatch(metActs.updateGroupingNoteValue(barIdx, groupingIdx, newValue)),
-    updateGroupingSubdivision: (barIdx: number, groupingIdx: number, newValue?: number) => dispatch(metActs.updateGroupingSubdivision(barIdx, groupingIdx, newValue))
+    addBar: () => dispatch(handleAddBar()),
+    removeBar: (idx: number) => dispatch(handleRemoveBar(idx)),
+    copyBar: (idx: number) => dispatch(songActs.copyBar(idx)),
+    updateBarNoteValue: (idx: number, newValue: NoteValue) => dispatch(songActs.updateBarNoteValue(idx, newValue)),
+    addGrouping: (barIdx: number) => dispatch(songActs.addGrouping(barIdx)),
+    removeGrouping: (barIdx: number, groupingIdx: number) => dispatch(songActs.removeGrouping(barIdx, groupingIdx)),
+    updateGroupingBeats: (barIdx: number, groupingIdx: number, newBeats: number) => dispatch(songActs.updateGroupingBeats(barIdx, groupingIdx, newBeats)),
+    updateGroupingNoteValue: (barIdx: number, groupingIdx: number, newValue: NoteValue) => dispatch(songActs.updateGroupingNoteValue(barIdx, groupingIdx, newValue)),
+    updateGroupingSubdivision: (barIdx: number, groupingIdx: number, newValue?: number) => dispatch(songActs.updateGroupingSubdivision(barIdx, groupingIdx, newValue))
   };
 };
 

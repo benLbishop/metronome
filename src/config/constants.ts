@@ -27,7 +27,8 @@ export const constants = {
     bars: {
         DEFAULT_GROUPING_DATA,
         DEFAULT_BAR_DATA,
-        DEFAULT_BARS: [DEFAULT_BAR_DATA]
+        DEFAULT_BARS: [DEFAULT_BAR_DATA],
+        MAX_NUM_BARS: 256 // TODO: idk what this should be
     },
     notes: {
         MAX_NOTE_VALUE_INT: 256,

@@ -26,6 +26,11 @@ const TextInput: React.FC<Props> = (props: Props) => {
   };
 
   const onFocus = () => {
+    // NOTE: setTempValue is called here because prop.value
+    // might have changed while the input was not focused.
+    // TODO: Would it be better to call setTempValue every time prop.value updates?
+    // not sure where I'd call that
+    setTempValue(props.value);
     setIsFocused(true);
   };
 
