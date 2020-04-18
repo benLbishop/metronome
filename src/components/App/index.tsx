@@ -6,7 +6,7 @@ import './App.scss';
 import Metronome from '../Metronome';
 import { RootState } from '../../reducers';
 import { BarData, Tempo, NoteValue } from '../../types/barTypes';
-import { metronomeActions, handleTogglePlay, handleUpdateEndingBarIdx, handleUpdateStartingBarIdx } from '../../actions/metronomeActions';
+import { handleTogglePlay, handleUpdateEndingBarIdx, handleUpdateStartingBarIdx } from '../../actions/metronomeActions';
 import LeftMenu from '../LeftMenu';
 import { songActions, handleAddBar, handleRemoveBar } from '../../actions/songActions';
 
@@ -84,23 +84,21 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, undefined, Action>) => {
-  const metActs = metronomeActions;
-  const songActs = songActions;
   return {
     togglePlay: () => dispatch(handleTogglePlay()),
-    updateBPM: (newBPM: number) => dispatch(songActs.updateBPM(newBPM)),
-    updateNoteValue: (newValue: NoteValue) => dispatch(songActs.updateNoteValue(newValue)),
+    updateBPM: (newBPM: number) => dispatch(songActions.updateBPM(newBPM)),
+    updateNoteValue: (newValue: NoteValue) => dispatch(songActions.updateNoteValue(newValue)),
     updateStartingBarIdx: (newIdx: number) => dispatch(handleUpdateStartingBarIdx(newIdx)),
     updateEndingBarIdx: (newIdx: number) => dispatch(handleUpdateEndingBarIdx(newIdx)),
     addBar: () => dispatch(handleAddBar()),
     removeBar: (idx: number) => dispatch(handleRemoveBar(idx)),
-    copyBar: (idx: number) => dispatch(songActs.copyBar(idx)),
-    updateBarNoteValue: (idx: number, newValue: NoteValue) => dispatch(songActs.updateBarNoteValue(idx, newValue)),
-    addGrouping: (barIdx: number) => dispatch(songActs.addGrouping(barIdx)),
-    removeGrouping: (barIdx: number, groupingIdx: number) => dispatch(songActs.removeGrouping(barIdx, groupingIdx)),
-    updateGroupingBeats: (barIdx: number, groupingIdx: number, newBeats: number) => dispatch(songActs.updateGroupingBeats(barIdx, groupingIdx, newBeats)),
-    updateGroupingNoteValue: (barIdx: number, groupingIdx: number, newValue: NoteValue) => dispatch(songActs.updateGroupingNoteValue(barIdx, groupingIdx, newValue)),
-    updateGroupingSubdivision: (barIdx: number, groupingIdx: number, newValue?: number) => dispatch(songActs.updateGroupingSubdivision(barIdx, groupingIdx, newValue))
+    copyBar: (idx: number) => dispatch(songActions.copyBar(idx)),
+    updateBarNoteValue: (idx: number, newValue: NoteValue) => dispatch(songActions.updateBarNoteValue(idx, newValue)),
+    addGrouping: (barIdx: number) => dispatch(songActions.addGrouping(barIdx)),
+    removeGrouping: (barIdx: number, groupingIdx: number) => dispatch(songActions.removeGrouping(barIdx, groupingIdx)),
+    updateGroupingBeats: (barIdx: number, groupingIdx: number, newBeats: number) => dispatch(songActions.updateGroupingBeats(barIdx, groupingIdx, newBeats)),
+    updateGroupingNoteValue: (barIdx: number, groupingIdx: number, newValue: NoteValue) => dispatch(songActions.updateGroupingNoteValue(barIdx, groupingIdx, newValue)),
+    updateGroupingSubdivision: (barIdx: number, groupingIdx: number, newValue?: number) => dispatch(songActions.updateGroupingSubdivision(barIdx, groupingIdx, newValue))
   };
 };
 

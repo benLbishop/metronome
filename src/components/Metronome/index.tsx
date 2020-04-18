@@ -1,10 +1,9 @@
 import React from 'react';
 
 import './Metronome.scss';
-import { BarData, Tempo, NoteValue } from '../../types/barTypes';
+import { BarData, NoteValue } from '../../types/barTypes';
 
 import Bar from '../Bar';
-import SettingsBar from '../SettingsBar';
 
 interface Props {
   bars: BarData[];

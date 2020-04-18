@@ -2,7 +2,7 @@ import { createAction, ActionType } from 'typesafe-actions';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { convertNoteValueToInt } from '../lib/noteValue';
-import { NoteValue, BarData } from '../types/barTypes';
+import { BarData } from '../types/barTypes';
 import { RootState } from '../reducers';
 import { playSound } from '../config/sounds';
 
