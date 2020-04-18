@@ -18,11 +18,13 @@ interface Props {
 const SettingsBar: React.FC<Props> = (props: Props) => {
   return (
     <div className='settingsBar'>
-      <button onClick={props.addBar}>Add Bar</button>
+      <div className='globalTempo'>
+        <div className='stdP'>BPM:</div>
+        <TextInput value={props.tempo.bpm} updateValue={props.updateBPM}/>
+        <SelectInput selectedValue={props.tempo.noteValue} values={constants.notes.NOTE_VALUE_LIST} updateValue={props.updateNoteValue}/>
+      </div>
       <button className='playButton' onMouseDown={props.togglePlay}>{props.playing ? 'stop' : 'start'}</button>
-      <div className='stdP'>BPM:</div>
-      <TextInput value={props.tempo.bpm} updateValue={props.updateBPM}/>
-      <SelectInput selectedValue={props.tempo.noteValue} values={constants.notes.NOTE_VALUE_LIST} updateValue={props.updateNoteValue}/>
+      <button onClick={props.addBar}>Add Bar</button>
     </div>
   );
 };

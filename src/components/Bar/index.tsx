@@ -25,7 +25,8 @@ const Bar: React.FC<Props> = (props: Props) => {
       <div className='barFieldSection'>
         <TimeSignature
           className={'timeSignature'}
-          textInputStyle={{ width: '80%', margin: '10% 0' }}
+          textInputStyle={{ width: '80%', height: '20%', margin: '10% 0' }}
+          noteValueStyle={{ height: '20%' }}
           beats={beats}
           noteValue={noteValue}
           updateBeats={props.updateBeats}

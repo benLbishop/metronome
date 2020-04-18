@@ -1,15 +1,16 @@
 .settingsBar {
     display: flex;
     // flex: 1;
-    flex-direction: row;
+    flex-direction: column;
     background-color: blue;
-    justify-content: flex-end;
-    align-items: stretch;
+    align-items: center;
 }
 
 .playButton {
     // width: 5ex;
     // height: 10ex;
+    width: 90%;
+    height: 20%;
     justify-content: center;
 }
 
@@ -19,4 +20,9 @@
     // margin: 2ex 0;
     background-color: green;
     justify-content: center;
+}
+
+.globalTempo {
+    display: flex;
+    flex-direction: row;
 }

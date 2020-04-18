@@ -61,6 +61,7 @@ const TextInput: React.FC<Props> = (props: Props) => {
         className='textInput'
         style={props.style}
         type='text'
+        maxLength={3}
         value={getDisplayValue()}
         onChange={handleTextChange}
         onFocus={onFocus}

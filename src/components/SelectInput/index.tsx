@@ -5,6 +5,7 @@ import './SelectInput.scss';
 interface Props {
   selectedValue: string;
   values: string[];
+  style?: React.CSSProperties;
   updateValue(newValue: string): void;
 }
 
@@ -23,6 +24,7 @@ const SelectInput: React.FC<Props> = (props) => {
   return (
     <select
       className='selectInput'
+      style={props.style}
       value={props.selectedValue}
       onChange={handleChange}
     >

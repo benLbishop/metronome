@@ -5,7 +5,11 @@
     flex-direction: column;
     background-color: black;
     justify-content: space-evenly;
-    // margin: 5px;
+    border-width: 5px;
+    border-color: red;
+    border-radius: 20px;
+    border-style: solid;
+    margin: 0 5px;
 }
 
 .buttonRow {
@@ -29,4 +33,7 @@
     flex-direction: row;
     align-items: stretch;
     padding-bottom: 3%;
+    border-bottom-width: 3px;
+    border-bottom-color: green;
+    border-bottom-style: solid;
 }

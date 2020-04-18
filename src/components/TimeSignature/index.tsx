@@ -9,6 +9,7 @@ interface Props {
   beats: number;
   noteValue: NoteValue;
   textInputStyle?: React.CSSProperties;
+  noteValueStyle?: React.CSSProperties;
   updateBeats(newBeats: number): void;
   updateNoteValue(newValue: NoteValue): void;
 }
@@ -19,8 +20,15 @@ const TimeSignature: React.FC<Props> = (props: Props) => {
   //@ts-ignore
   return (
     <div className={props.className}>
-      <TextInput style={props.textInputStyle} value={beats} updateValue={(newBeats: number) => props.updateBeats(newBeats)} />
-      <SelectInput selectedValue={noteValue} values={constants.notes.NOTE_VALUE_LIST} updateValue={(newValue: NoteValue) => props.updateNoteValue(newValue)} />
+      <TextInput
+        style={props.textInputStyle}
+        value={beats}
+        updateValue={(newBeats: number) => props.updateBeats(newBeats)} />
+      <SelectInput
+        style={props.noteValueStyle}
+        selectedValue={noteValue}
+        values={constants.notes.NOTE_VALUE_LIST}
+        updateValue={(newValue: NoteValue) => props.updateNoteValue(newValue)} />
     </div>
   );
 };
