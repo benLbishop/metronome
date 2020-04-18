@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './TextInput.scss';
 import { KeyCodes } from '../../types/htmlTypes';
 
@@ -12,6 +12,7 @@ interface Props {
 // and that isn't clear at all by the component name
 const TextInput: React.FC<Props> = (props: Props) => {
 
+  const inputRef: React.MutableRefObject<HTMLInputElement> = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
   const [tempValue, setTempValue] = useState<number | undefined>(props.value);
 
@@ -58,11 +59,13 @@ const TextInput: React.FC<Props> = (props: Props) => {
     }
     if (e.charCode === KeyCodes.ENTER) {
       props.updateValue(tempValue);
+      inputRef.current.blur();
     }
   };
 
   return (
       <input
+        ref={inputRef}
         className='textInput'
         style={props.style}
         type='text'
