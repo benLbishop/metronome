@@ -2,18 +2,19 @@ import { createAction, ActionType } from 'typesafe-actions';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { convertNoteValueToInt } from '../lib/noteValue';
-import { BarData } from '../types/barTypes';
 import { RootState } from '../reducers';
 import { playSound } from '../config/sounds';
+import { calculateNextBeatInfo } from '../lib/bar';
 
-const TOGGLE_PLAYING = 'TOGGLE_PLAY';
+const METRONOME_STARTED = 'METRONOME_STARTED';
+const METRONOME_STOPPED = 'METRONOME_STOPPED';
 const UPDATE_CUR_BEAT = 'UPDATE_CUR_BEAT';
 const UPDATE_STARTING_BAR_IDX = 'UPDATE_STARTING_BAR_IDX';
 const UPDATE_ENDING_BAR_IDX = 'UPDATE_ENDING_BAR_IDX';
-const CANCEL_CUR_TIMEOUT = 'CANCEL_CUR_TIMEOUT';
 
 export const metronomeActions = {
-    togglePlaying: createAction(TOGGLE_PLAYING)(),
+    metronomeStarted: createAction(METRONOME_STARTED)(),
+    metronomeStopped: createAction(METRONOME_STOPPED)(),
     updateCurBeat: createAction(
         UPDATE_CUR_BEAT,
         (timeout: NodeJS.Timeout, newBeat: number, newBarIdx: number, newGroupingIdx: number) => ({
@@ -30,14 +31,13 @@ export const metronomeActions = {
     updateEndingBarIdx: createAction(
         UPDATE_ENDING_BAR_IDX,
         (newIdx: number) => ({ newIdx })
-    )(),
-    cancelCurTimeout: createAction(CANCEL_CUR_TIMEOUT)()
+    )()
 };
 
 export type MetronomeAction = ActionType<typeof metronomeActions>;
 
 // TODO: clean up
-const startMetronome = () => {
+const incrementMetronome = () => {
     return (dispatch: ThunkDispatch<RootState, void, Action>, getState: () => RootState) => {
         const { curBarIdx, curBeat, curGroupingIdx, startingBarIdx, endingBarIdx } = getState().metronome;
         const { bars, tempo } = getState().song;
@@ -52,7 +52,7 @@ const startMetronome = () => {
         const noteDuration = (60 / tempo.bpm) * noteValueRatio / subdivisionFactor;
 
         const timeout = setTimeout(() => {
-            dispatch(startMetronome());
+            dispatch(incrementMetronome());
         }, noteDuration * 1000);
 
         // TODO: this is yucky
@@ -69,49 +69,17 @@ const startMetronome = () => {
     };
 };
 
-// TODO: sort of unecessary if it just dispatches another function
-export const stopMetronome = () => {
+export const startMetronome = () => {
     return (dispatch: ThunkDispatch<RootState, void, Action>) => {
-        dispatch(metronomeActions.cancelCurTimeout());
+        dispatch(metronomeActions.metronomeStarted());
+        dispatch(incrementMetronome()); // starts actually playing metronome
     };
 };
 
-// TODO: this is yucky
-const calculateNextBeatInfo = (
-    curBeat: number,
-    bars: BarData[],
-    curBarIdx: number,
-    curGroupingIdx: number,
-    startingBarIdx: number,
-    endingBarIdx: number
-): {
-    newBeat: number,
-    newBarIdx: number,
-    newGroupingIdx: number
-} => {
-    let newBeat = curBeat + 1;
-    let newBarIdx = curBarIdx;
-    let newGroupingIdx = curGroupingIdx;
-    const curBar = bars[curBarIdx];
-    const curGrouping = curBar.groupings[curGroupingIdx];
-    const maxBeats = curGrouping.subdivision
-        ? curGrouping.beats * curGrouping.subdivision
-        : curGrouping.beats;
-    if (newBeat >= maxBeats) {
-        newBeat = 0;
-        newGroupingIdx += 1;
-        if (newGroupingIdx >= curBar.groupings.length) {
-            newGroupingIdx = 0;
-            newBarIdx += + 1;
-            if (newBarIdx > endingBarIdx) {
-                newBarIdx = startingBarIdx;
-            }
-        }
-    }
-    return {
-        newBeat,
-        newBarIdx,
-        newGroupingIdx
+// TODO: sort of unecessary if it just dispatches another function
+export const stopMetronome = () => {
+    return (dispatch: ThunkDispatch<RootState, void, Action>) => {
+        dispatch(metronomeActions.metronomeStopped());
     };
 };
 
@@ -123,7 +91,6 @@ export const handleTogglePlay = () => {
         } else {
             dispatch(startMetronome());
         }
-        dispatch(metronomeActions.togglePlaying());
     };
 };
 

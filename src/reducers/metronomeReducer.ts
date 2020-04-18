@@ -1,5 +1,6 @@
 import { metronomeActions, MetronomeAction } from '../actions/metronomeActions';
 import { getType } from 'typesafe-actions';
+import { SongAction, songActions } from '../actions/songActions';
 
 // TODO: break bar stuff into a separate reducer? curBeat depends on bar info, so maybe not
 export interface MetronomeState {
@@ -24,13 +25,32 @@ const initialState: MetronomeState = {
 // TODO: try new typesafe-actions createReducer?
 const MetronomeReducer = (
     state: MetronomeState = initialState,
-    action: MetronomeAction
+    action: MetronomeAction | SongAction
 ): MetronomeState => {
     switch (action.type) {
-        case getType(metronomeActions.togglePlaying): {
+        case getType(metronomeActions.metronomeStarted): {
+            // don't expect this to happen, but clear any existing timeouts in case metronome
+            // tries to start and is already playing
+            const { curTimeout } = state;
+            if (curTimeout) {
+                clearTimeout(curTimeout);
+            }
             return {
                 ...state,
-                playing: !state.playing
+                playing: true
+            };
+        }
+        case getType(metronomeActions.metronomeStopped): {
+            const { curTimeout } = state;
+            if (curTimeout) {
+                clearTimeout(curTimeout);
+            }
+            return {
+                ...state,
+                playing: false,
+                curBeat: 0,
+                curBarIdx: state.startingBarIdx,
+                curTimeout: undefined
             };
         }
         case getType(metronomeActions.updateCurBeat): {
@@ -63,17 +83,13 @@ const MetronomeReducer = (
                 endingBarIdx: action.payload.newIdx
             };
         }
-        case getType(metronomeActions.cancelCurTimeout): {
-            const { curTimeout } = state;
-            if (!curTimeout) {
-                return state;
-            }
-            clearTimeout(curTimeout);
+        /** SONG ACTIONS **/
+        case getType(songActions.songLoaded): {
+            const lastBarIdx = action.payload.song.bars.length - 1;
             return {
                 ...state,
-                curTimeout: undefined,
-                curBeat: 0,
-                curBarIdx: state.startingBarIdx
+                startingBarIdx: 0,
+                endingBarIdx: lastBarIdx
             };
         }
         default: {
