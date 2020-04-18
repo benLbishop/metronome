@@ -119,3 +119,23 @@ export const handleTogglePlay = () => {
         dispatch(metronomeActions.togglePlay());
     };
 };
+
+export const handleUpdateStartingBarIdx = (newIdx: number) => {
+    return (dispatch: ThunkDispatch<RootState, void, Action>, getState: () => RootState) => {
+        const maxBarIdx = getState().song.bars.length - 1;
+        if (newIdx > maxBarIdx) {
+            return;
+        }
+        dispatch(metronomeActions.updateStartingBarIdx(newIdx));
+    };
+};
+
+export const handleUpdateEndingBarIdx = (newIdx: number) => {
+    return (dispatch: ThunkDispatch<RootState, void, Action>, getState: () => RootState) => {
+        const maxBarIdx = getState().song.bars.length - 1;
+        if (newIdx > maxBarIdx) {
+            return;
+        }
+        dispatch(metronomeActions.updateEndingBarIdx(newIdx));
+    };
+};

@@ -6,7 +6,7 @@ import './App.scss';
 import Metronome from '../Metronome';
 import { RootState } from '../../reducers';
 import { BarData, Tempo, NoteValue } from '../../types/barTypes';
-import { metronomeActions, handleTogglePlay } from '../../actions/metronomeActions';
+import { metronomeActions, handleTogglePlay, handleUpdateEndingBarIdx, handleUpdateStartingBarIdx } from '../../actions/metronomeActions';
 import LeftMenu from '../LeftMenu';
 import { songActions, handleAddBar, handleRemoveBar } from '../../actions/songActions';
 
@@ -90,8 +90,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, undefined, Action
     togglePlay: () => dispatch(handleTogglePlay()),
     updateBPM: (newBPM: number) => dispatch(songActs.updateBPM(newBPM)),
     updateNoteValue: (newValue: NoteValue) => dispatch(songActs.updateNoteValue(newValue)),
-    updateStartingBarIdx: (newIdx: number) => dispatch(metActs.updateStartingBarIdx(newIdx)),
-    updateEndingBarIdx: (newIdx: number) => dispatch(metActs.updateEndingBarIdx(newIdx)),
+    updateStartingBarIdx: (newIdx: number) => dispatch(handleUpdateStartingBarIdx(newIdx)),
+    updateEndingBarIdx: (newIdx: number) => dispatch(handleUpdateEndingBarIdx(newIdx)),
     addBar: () => dispatch(handleAddBar()),
     removeBar: (idx: number) => dispatch(handleRemoveBar(idx)),
     copyBar: (idx: number) => dispatch(songActs.copyBar(idx)),
