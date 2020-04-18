@@ -4,10 +4,11 @@ import './Bar.scss';
 import { BarData, NoteValue } from '../../types/barTypes';
 import GroupingsContainer from '../GroupingsContainer';
 import TimeSignature from '../TimeSignature';
+import { constants } from '../../config/constants';
+import SelectInput from '../SelectInput';
 
 interface Props {
   bar: BarData;
-  updateBeats(beats: number): void;
   updateNoteValue(noteValue: NoteValue): void;
   updateGroupingBeats(idx: number, beats: number): void;
   updateGroupingNoteValue(idx: number, noteValue: NoteValue): void;
@@ -24,15 +25,14 @@ const Bar: React.FC<Props> = (props: Props) => {
   return (
     <div className='bar'>
       <div className='barFieldSection'>
-        <TimeSignature
-          className={'timeSignature'}
-          textInputStyle={{ width: '80%', height: '20%', margin: '10% 0' }}
-          noteValueStyle={{ height: '20%' }}
-          beats={beats}
-          noteValue={noteValue}
-          updateBeats={props.updateBeats}
-          updateNoteValue={props.updateNoteValue}
-        />
+        <div className={'timeSignature'}>
+          <p className='barBeat'>{props.bar.beats}</p>
+          <SelectInput
+          style={{ height: '20%' }}
+          selectedValue={noteValue}
+          values={constants.notes.NOTE_VALUE_LIST}
+          updateValue={(newValue: NoteValue) => props.updateNoteValue(newValue)} />
+        </div>
         <GroupingsContainer
           groupings={groupings}
           removeGrouping={props.removeGrouping}

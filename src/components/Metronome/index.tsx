@@ -16,7 +16,6 @@ interface Props {
   addBar(): void;
   removeBar(idx: number): void;
   copyBar(idx: number): void;
-  updateBarBeats(idx: number, newBeats: number): void;
   updateBarNoteValue(idx: number, newValue: NoteValue): void;
   addGrouping(barIdx: number): void;
   removeGrouping(barIdx: number, groupingIdx: number): void;
@@ -31,7 +30,6 @@ const Metronome: React.FC<Props> = (props: Props) => {
       return <Bar
         key={`bar${bar.id}`}
         bar={bar}
-        updateBeats={(beats: number) => props.updateBarBeats(idx, beats)}
         updateNoteValue={(newVal: NoteValue) => props.updateBarNoteValue(idx, newVal)}
         remove={() => props.removeBar(idx)}
         copy={() => props.copyBar(idx)}

@@ -1,8 +1,9 @@
 import { metronomeActions, MetronomeAction } from '../actions/metronomeActions';
 import { getType } from 'typesafe-actions';
 import { BarData, GroupingData, NoteValue, Tempo } from '../types/barTypes';
-import { checkIfBarFull } from '../lib/bar';
+import { checkIfBarFull, getGroupingsBeatSum } from '../lib/bar';
 import { makeElectricSunrise, makeJolt } from '../config/songs';
+import { convertNoteValueToInt } from '../lib/noteValue';
 
 // TODO: move to constants
 const DEFAULT_GROUPING_DATA: GroupingData = {
@@ -39,7 +40,7 @@ const initialState: MetronomeState = {
     curBarIdx: 0,
     curGroupingIdx: 0,
     newBarId: 1,
-    bars: makeElectricSunrise()
+    bars: [DEFAULT_BAR_DATA]
 };
 
 const MetronomeReducer = (
@@ -125,23 +126,14 @@ const MetronomeReducer = (
             console.log('copyBar not implemented');
             return state;
         }
-        case getType(metronomeActions.updateBarBeats): {
-            const { idx, newBeats } = action.payload;
-            const newBars = state.bars.slice();
-            newBars[idx] = {
-                ...newBars[idx],
-                beats: newBeats
-            };
-            return {
-                ...state,
-                bars: newBars
-            };
-        }
         case getType(metronomeActions.updateBarNoteValue): {
             const { idx, newNoteValue } = action.payload;
             const newBars = state.bars.slice();
+            const groupingBeatSum = getGroupingsBeatSum(newBars[idx].groupings);
+            const newBarBeats = groupingBeatSum / convertNoteValueToInt(newNoteValue);
             newBars[idx] = {
                 ...newBars[idx],
+                beats: newBarBeats,
                 noteValue: newNoteValue
             };
             return {
@@ -152,10 +144,16 @@ const MetronomeReducer = (
         case getType(metronomeActions.addGrouping): {
             const { barIdx } = action.payload;
             const newBars = state.bars.slice();
+            const targetBar = newBars[barIdx];
+            const newGroupings = [...targetBar.groupings, DEFAULT_GROUPING_DATA];
+            const groupingBeatSum = getGroupingsBeatSum(newGroupings);
+            const newBarBeats = groupingBeatSum / convertNoteValueToInt(targetBar.noteValue);
             newBars[barIdx] = {
                 ...newBars[barIdx],
-                groupings: [...newBars[barIdx].groupings, DEFAULT_GROUPING_DATA]
+                beats: newBarBeats,
+                groupings: newGroupings
             };
+
             return {
                 ...state,
                 bars: newBars
@@ -167,8 +165,11 @@ const MetronomeReducer = (
             const targetBar = newBars[barIdx];
             const newGroupings = targetBar.groupings.slice();
             newGroupings.splice(groupingIdx, 1);
+            const groupingBeatSum = getGroupingsBeatSum(newGroupings);
+            const newBarBeats = groupingBeatSum / convertNoteValueToInt(targetBar.noteValue);
             newBars[barIdx] = {
                 ...newBars[barIdx],
+                beats: newBarBeats,
                 groupings: newGroupings
             };
             return {
@@ -185,8 +186,11 @@ const MetronomeReducer = (
                     ...newGroupings[groupingIdx],
                     beats: newBeats
             };
+            const groupingBeatSum = getGroupingsBeatSum(newGroupings);
+            const newBarBeats = groupingBeatSum / convertNoteValueToInt(targetBar.noteValue);
             newBars[barIdx] = {
                 ...newBars[barIdx],
+                beats: newBarBeats,
                 groupings: newGroupings
             };
             return {
@@ -203,8 +207,11 @@ const MetronomeReducer = (
                     ...newGroupings[groupingIdx],
                     noteValue: newNoteValue
             };
+            const groupingBeatSum = getGroupingsBeatSum(newGroupings);
+            const newBarBeats = groupingBeatSum / convertNoteValueToInt(targetBar.noteValue);
             newBars[barIdx] = {
                 ...newBars[barIdx],
+                beats: newBarBeats,
                 groupings: newGroupings
             };
             return {

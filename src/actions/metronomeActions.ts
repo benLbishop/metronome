@@ -14,7 +14,6 @@ const UPDATE_CUR_BEAT = 'UPDATE_CUR_BEAT';
 const ADD_BAR = 'ADD_BAR';
 const REMOVE_BAR = 'REMOVE_BAR';
 const COPY_BAR = 'COPY_BAR';
-const UPDATE_BAR_BEATS = 'UPDATE_BAR_BEATS';
 const UPDATE_BAR_NOTE_VALUE = 'UPDATE_BAR_NOTE_VALUE';
 const ADD_GROUPING = 'ADD_GROUPING';
 const REMOVE_GROUPING = 'REMOVE_GROUPING';
@@ -44,10 +43,6 @@ export const metronomeActions = {
     copyBar: createAction(
         COPY_BAR,
         (idx: number) => ({ idx })
-    )(),
-    updateBarBeats: createAction(
-        UPDATE_BAR_BEATS,
-        (idx: number, newBeats: number) => ({ idx, newBeats })
     )(),
     updateBarNoteValue: createAction(
         UPDATE_BAR_NOTE_VALUE,
