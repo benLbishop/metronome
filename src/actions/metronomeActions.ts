@@ -19,6 +19,7 @@ const ADD_GROUPING = 'ADD_GROUPING';
 const REMOVE_GROUPING = 'REMOVE_GROUPING';
 const UPDATE_GROUPING_BEATS = 'UPDATE_GROUPING_BEATS';
 const UPDATE_GROUPING_NOTE_VALUE = 'UPDATE_GROUPING_NOTE_VALUE';
+const UPDATE_GROUPING_SUBDIVISION = 'UPDATE_GROUPING_SUBDIVISION';
 const CANCEL_CUR_TIMEOUT = 'CANCEL_CUR_TIMEOUT';
 
 export const metronomeActions = {
@@ -63,6 +64,10 @@ export const metronomeActions = {
     updateGroupingNoteValue: createAction(
         UPDATE_GROUPING_NOTE_VALUE,
         (barIdx: number, groupingIdx: number, newNoteValue: NoteValue) => ({ barIdx, groupingIdx, newNoteValue })
+    )(),
+    updateGroupingSubdivision: createAction(
+        UPDATE_GROUPING_SUBDIVISION,
+        (barIdx: number, groupingIdx: number, newValue?: number) => ({ barIdx, groupingIdx, newValue })
     )(),
     cancelCurTimeout: createAction(CANCEL_CUR_TIMEOUT)()
 };

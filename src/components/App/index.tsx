@@ -32,6 +32,7 @@ interface Props {
   removeGrouping(barIdx: number, groupingIdx: number): void;
   updateGroupingBeats(barIdx: number, groupingIdx: number, newBeats: number): void;
   updateGroupingNoteValue(barIdx: number, groupingIdx: number, newValue: NoteValue): void;
+  updateGroupingSubdivision(barIdx: number, groupingIdx: number, newValue?: number): void;
 }
 
 const App: React.FC<Props> = (props: Props) => {
@@ -64,7 +65,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, undefined, Action
     addGrouping: (barIdx: number) => dispatch(metActs.addGrouping(barIdx)),
     removeGrouping: (barIdx: number, groupingIdx: number) => dispatch(metActs.removeGrouping(barIdx, groupingIdx)),
     updateGroupingBeats: (barIdx: number, groupingIdx: number, newBeats: number) => dispatch(metActs.updateGroupingBeats(barIdx, groupingIdx, newBeats)),
-    updateGroupingNoteValue: (barIdx: number, groupingIdx: number, newValue: NoteValue) => dispatch(metActs.updateGroupingNoteValue(barIdx, groupingIdx, newValue))
+    updateGroupingNoteValue: (barIdx: number, groupingIdx: number, newValue: NoteValue) => dispatch(metActs.updateGroupingNoteValue(barIdx, groupingIdx, newValue)),
+    updateGroupingSubdivision: (barIdx: number, groupingIdx: number, newValue?: number) => dispatch(metActs.updateGroupingSubdivision(barIdx, groupingIdx, newValue))
   };
 };
 

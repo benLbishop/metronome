@@ -3,7 +3,6 @@ import React from 'react';
 import './Bar.scss';
 import { BarData, NoteValue } from '../../types/barTypes';
 import GroupingsContainer from '../GroupingsContainer';
-import TimeSignature from '../TimeSignature';
 import { constants } from '../../config/constants';
 import SelectInput from '../SelectInput';
 
@@ -12,6 +11,7 @@ interface Props {
   updateNoteValue(noteValue: NoteValue): void;
   updateGroupingBeats(idx: number, beats: number): void;
   updateGroupingNoteValue(idx: number, noteValue: NoteValue): void;
+  updateSubdivision(idx: number, newValue?: number): void;
   remove(): void;
   addGrouping(): void;
   removeGrouping(idx: number): void;
@@ -26,7 +26,7 @@ const Bar: React.FC<Props> = (props: Props) => {
     <div className='bar'>
       <div className='barFieldSection'>
         <div className={'timeSignature'}>
-          <p className='barBeat'>{props.bar.beats}</p>
+          <p className='barBeat'>{beats}</p>
           <SelectInput
           style={{ height: '20%' }}
           selectedValue={noteValue}
@@ -38,6 +38,7 @@ const Bar: React.FC<Props> = (props: Props) => {
           removeGrouping={props.removeGrouping}
           updateBeats={props.updateGroupingBeats}
           updateNoteValue={props.updateGroupingNoteValue}
+          updateSubdivision={props.updateSubdivision}
         />
       </div>
       <div className='buttonRow'>

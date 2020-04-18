@@ -3,16 +3,25 @@ import { GroupingData, NoteValue } from '../../types/barTypes';
 
 import './Grouping.scss';
 import TimeSignature from '../TimeSignature';
+import SelectInput from '../SelectInput';
 
 interface Props {
   grouping: GroupingData;
   remove(): void;
   updateBeats(newBeats: number): void;
   updateNoteValue(newValue: NoteValue): void;
+  updateSubdivision(newValue?: number): void;
 }
 
 const Grouping: React.FC<Props> = (props: Props) => {
-  const { beats, noteValue } = props.grouping;
+  const { beats, noteValue, subdivision } = props.grouping;
+
+  const updateSubdivision = (newValue: string) => {
+    if (newValue === '') {
+      props.updateSubdivision(undefined);
+    }
+    props.updateSubdivision(parseInt(newValue, 10));
+  };
   return (
     <div className={'grouping'}>
       <TimeSignature
@@ -24,6 +33,11 @@ const Grouping: React.FC<Props> = (props: Props) => {
         updateBeats={props.updateBeats}
         updateNoteValue={props.updateNoteValue}
       />
+      <SelectInput
+          style={{ height: '20%', width: '80%' }}
+          selectedValue={subdivision !== undefined ? subdivision.toString() : ''}
+          values={['', '2', '3', '4', '5']}
+          updateValue={updateSubdivision} />
       <button onClick={props.remove}>Remove</button>
     </div>
   );

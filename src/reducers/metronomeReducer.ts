@@ -40,7 +40,7 @@ const initialState: MetronomeState = {
     curBarIdx: 0,
     curGroupingIdx: 0,
     newBarId: 1,
-    bars: [DEFAULT_BAR_DATA]
+    bars: makeJolt()
 };
 
 const MetronomeReducer = (
@@ -206,6 +206,28 @@ const MetronomeReducer = (
                 newGroupings[groupingIdx] = {
                     ...newGroupings[groupingIdx],
                     noteValue: newNoteValue
+            };
+            const groupingBeatSum = getGroupingsBeatSum(newGroupings);
+            const newBarBeats = groupingBeatSum / convertNoteValueToInt(targetBar.noteValue);
+            newBars[barIdx] = {
+                ...newBars[barIdx],
+                beats: newBarBeats,
+                groupings: newGroupings
+            };
+            return {
+                ...state,
+                bars: newBars
+            };
+        }
+        case getType(metronomeActions.updateGroupingSubdivision): {
+            // TODO: probably could have one reducer method for this, noteValue, and beats
+            const { barIdx, groupingIdx, newValue } = action.payload;
+            const newBars = state.bars.slice();
+            const targetBar = newBars[barIdx];
+            const newGroupings = targetBar.groupings.slice();
+                newGroupings[groupingIdx] = {
+                    ...newGroupings[groupingIdx],
+                    subdivision: newValue
             };
             const groupingBeatSum = getGroupingsBeatSum(newGroupings);
             const newBarBeats = groupingBeatSum / convertNoteValueToInt(targetBar.noteValue);

@@ -11,14 +11,15 @@ interface Props {
 
 const SelectInput: React.FC<Props> = (props) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const x = event.target.value;
+    const newSelection = event.target.value;
     // TODO: this says x is a string, so shouldn't TS get mad about this function? what if FormFields is a number?
-    props.updateValue(x);
+    props.updateValue(newSelection);
   };
 
   const getSelectOptions = (values: string[]): JSX.Element[] => {
-    return values.map(val => (<option key={val} value={val}>{val}</option>
+    const options = values.map(val => (<option key={val} value={val}>{val}</option>
     ));
+    return options;
   };
 
   return (

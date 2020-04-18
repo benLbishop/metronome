@@ -24,7 +24,6 @@ export interface BarData {
     beats: number;
     noteValue: NoteValue;
     groupings: GroupingData[];
-    subdivision?: number;
 }
 
 export interface Tempo {

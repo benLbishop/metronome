@@ -9,6 +9,7 @@ interface Props {
   removeGrouping(idx: number): void;
   updateBeats(idx: number, newBeats: number): void;
   updateNoteValue(idx: number, newValue: NoteValue): void;
+  updateSubdivision(idx: number, newValue?: number): void;
 }
 
 const GroupingsContainer: React.FC<Props> = (props: Props) => {
@@ -21,6 +22,7 @@ const GroupingsContainer: React.FC<Props> = (props: Props) => {
         remove={() => props.removeGrouping(idx)}
         updateBeats={(newBeats: number) => props.updateBeats(idx, newBeats)}
         updateNoteValue={(newValue: NoteValue) => props.updateNoteValue(idx, newValue)}
+        updateSubdivision={(newValue?: number) => props.updateSubdivision(idx, newValue)}
       />
     );
   });

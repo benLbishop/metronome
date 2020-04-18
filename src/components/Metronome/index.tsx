@@ -21,6 +21,7 @@ interface Props {
   removeGrouping(barIdx: number, groupingIdx: number): void;
   updateGroupingBeats(barIdx: number, groupingIdx: number, newBeats: number): void;
   updateGroupingNoteValue(barIdx: number, groupingIdx: number, newValue: NoteValue): void;
+  updateGroupingSubdivision(barIdx: number, groupingIdx: number, newValue?: number): void;
 }
 
 const Metronome: React.FC<Props> = (props: Props) => {
@@ -37,6 +38,7 @@ const Metronome: React.FC<Props> = (props: Props) => {
         removeGrouping={(groupingIdx: number) => props.removeGrouping(idx, groupingIdx)}
         updateGroupingBeats={(groupingIdx: number, newBeats: number) => props.updateGroupingBeats(idx, groupingIdx, newBeats)}
         updateGroupingNoteValue={(groupingIdx: number, newValue: NoteValue) => props.updateGroupingNoteValue(idx, groupingIdx, newValue)}
+        updateSubdivision={(groupingIdx: number, newValue?: number) => props.updateGroupingSubdivision(idx, groupingIdx, newValue)}
       />;
     });
     return bars;
