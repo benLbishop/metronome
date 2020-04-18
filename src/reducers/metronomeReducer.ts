@@ -49,6 +49,7 @@ const MetronomeReducer = (
                 playing: false,
                 curBeat: 0,
                 curBarIdx: state.startingBarIdx,
+                curGroupingIdx: 0,
                 curTimeout: undefined
             };
         }
