@@ -2,21 +2,8 @@ import { metronomeActions, MetronomeAction } from '../actions/metronomeActions';
 import { getType } from 'typesafe-actions';
 import { BarData, GroupingData, NoteValue, Tempo } from '../types/barTypes';
 import { checkIfBarFull, getGroupingsBeatSum } from '../lib/bar';
-import { makeElectricSunrise, makeJolt } from '../config/songs';
 import { convertNoteValueToInt } from '../lib/noteValue';
-
-// TODO: move to constants
-const DEFAULT_GROUPING_DATA: GroupingData = {
-    beats: 4,
-    noteValue: NoteValue.QUARTER
-};
-
-const DEFAULT_BAR_DATA: BarData = {
-    id: 0,
-    beats: 4,
-    noteValue: NoteValue.QUARTER,
-    groupings: [DEFAULT_GROUPING_DATA]
-};
+import { constants } from '../config/constants';
 
 // TODO: break bar stuff into a separate reducer? curBeat depends on bar info, so maybe not
 export interface MetronomeState {
@@ -42,7 +29,7 @@ const initialState: MetronomeState = {
     curBarIdx: 0,
     curGroupingIdx: 0,
     newBarId: 1,
-    bars: makeJolt(),
+    bars: constants.bars.DEFAULT_BARS,
     startingBarIdx: 0,
     endingBarIdx: 0
 };
@@ -77,33 +64,13 @@ const MetronomeReducer = (
             };
         }
         case getType(metronomeActions.updateCurBeat): {
-            // 1. take curBeat and find current measure
-            const { curBeat, curBarIdx, bars, curGroupingIdx } = state;
-            let newBeat = curBeat + 1;
-            let newBarIdx = curBarIdx;
-            let newGroupingIdx = curGroupingIdx;
-            const curBar = bars[curBarIdx];
-            const curGrouping = curBar.groupings[curGroupingIdx];
-            const maxBeats = curGrouping.subdivision
-                ? curGrouping.beats * curGrouping.subdivision
-                : curGrouping.beats;
-            if (newBeat >= maxBeats) {
-                newBeat = 0;
-                newGroupingIdx = curGroupingIdx + 1;
-                if (newGroupingIdx >= curBar.groupings.length) {
-                    newGroupingIdx = 0;
-                    newBarIdx += 1;
-                    if (newBarIdx > state.endingBarIdx) {
-                        newBarIdx = state.startingBarIdx;
-                    }
-                }
-            }
+            const { newBeat, newBarIdx, newGroupingIdx, timeout } = action.payload;
             return {
                 ...state,
-                curBarIdx: newBarIdx,
                 curBeat: newBeat,
+                curBarIdx: newBarIdx,
                 curGroupingIdx: newGroupingIdx,
-                curTimeout: action.payload.timeout
+                curTimeout: timeout
             };
         }
         case getType(metronomeActions.updateStartingBarIdx): {
@@ -129,7 +96,7 @@ const MetronomeReducer = (
         case getType(metronomeActions.addBar): {
             const newBars = state.bars.slice();
             const newBar: BarData = {
-                ...DEFAULT_BAR_DATA,
+                ...constants.bars.DEFAULT_BAR_DATA,
                 id: state.newBarId
             };
             newBars.push(newBar);
@@ -182,7 +149,7 @@ const MetronomeReducer = (
             const { barIdx } = action.payload;
             const newBars = state.bars.slice();
             const targetBar = newBars[barIdx];
-            const newGroupings = [...targetBar.groupings, DEFAULT_GROUPING_DATA];
+            const newGroupings = [...targetBar.groupings, constants.bars.DEFAULT_GROUPING_DATA];
             const groupingBeatSum = getGroupingsBeatSum(newGroupings);
             const newBarBeats = groupingBeatSum / convertNoteValueToInt(targetBar.noteValue);
             newBars[barIdx] = {

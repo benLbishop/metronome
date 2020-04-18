@@ -1,6 +1,7 @@
 import { BarData, NoteValue, GroupingData } from '../types/barTypes';
+import { Song } from '../types/songTypes';
 
-export const makeJolt = (): BarData[] => {
+const makeJoltBars = (): BarData[] => {
     const data: BarData[] = [];
     for (let i = 0; i < 12; i++) {
         let beats: number;
@@ -24,7 +25,7 @@ export const makeJolt = (): BarData[] => {
     return data;
 };
 
-export const makeJolt2 = (): BarData[] => {
+const makeJoltBars2 = (): BarData[] => {
     const data: BarData[] = [];
     for (let i = 0; i < 8; i++) {
         let beats: number;
@@ -52,7 +53,7 @@ export const makeJolt2 = (): BarData[] => {
     return data;
 };
 
-export const makeElectricSunrise = (): BarData[] => {
+const makeElectricSunriseBars = (): BarData[] => {
     const groupings: GroupingData[] = [];
     groupings.push({
         beats: 8,
@@ -71,4 +72,31 @@ export const makeElectricSunrise = (): BarData[] => {
         beats: 13
     };
     return [bar];
+};
+
+export const ELECTRIC_SUNRISE: Song = {
+    name: 'Electric Sunrise',
+    bars: makeElectricSunriseBars(),
+    tempo: {
+        bpm: 131,
+        noteValue: NoteValue.QUARTER
+    }
+};
+
+export const JOLT_INTRO: Song = {
+    name: 'Jolt [Intro]',
+    bars: makeJoltBars(),
+    tempo: {
+        bpm: 100,
+        noteValue: NoteValue.QUARTER
+    }
+};
+
+export const JOLT_MID: Song = {
+    name: 'Jolt [Middle]',
+    bars: makeJoltBars2(),
+    tempo: {
+        bpm: 100,
+        noteValue: NoteValue.QUARTER
+    }
 };

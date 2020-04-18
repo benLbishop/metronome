@@ -2,7 +2,7 @@ import { createAction, ActionType } from 'typesafe-actions';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { convertNoteValueToInt } from '../lib/noteValue';
-import { NoteValue } from '../types/barTypes';
+import { NoteValue, BarData } from '../types/barTypes';
 import { RootState } from '../reducers';
 import { playSound } from '../config/sounds';
 
@@ -36,7 +36,12 @@ export const metronomeActions = {
     )(),
     updateCurBeat: createAction(
         UPDATE_CUR_BEAT,
-        (timeout: NodeJS.Timeout) => ({ timeout })
+        (timeout: NodeJS.Timeout, newBeat: number, newBarIdx: number, newGroupingIdx: number) => ({
+            newBeat,
+            newBarIdx,
+            newGroupingIdx,
+            timeout
+        })
     )(),
     updateStartingBarIdx: createAction(
         UPDATE_STARTING_BAR_IDX,
@@ -97,10 +102,53 @@ export const startSound = () => {
         const subdivisionMultiplier = curGrouping.subdivision ? curGrouping.subdivision : 1;
         noteDuration = (60 / tempo.bpm) / (noteValueRatio * subdivisionMultiplier);
 
+        const nextBeatInfo = calculateNextBeatInfo(getState().metronome);
+
         const timeout = setTimeout(() => {
             dispatch(startSound());
         }, noteDuration * 1000);
-        dispatch(metronomeActions.updateCurBeat(timeout));
+
+        dispatch(metronomeActions.updateCurBeat(timeout, nextBeatInfo.newBeat, nextBeatInfo.newBarIdx, nextBeatInfo.newGroupingIdx));
+    };
+};
+
+// TODO: this is yucky
+const calculateNextBeatInfo = (prevBeatInfo: {
+    curBeat: number,
+    bars: BarData[],
+    curBarIdx: number,
+    curGroupingIdx: number,
+    startingBarIdx: number,
+    endingBarIdx: number
+}): {
+    newBeat: number,
+    newBarIdx: number,
+    newGroupingIdx: number
+} => {
+    const { curBeat, bars, curBarIdx, curGroupingIdx, startingBarIdx, endingBarIdx} = prevBeatInfo;
+    let newBeat = curBeat + 1;
+    let newBarIdx = curBarIdx;
+    let newGroupingIdx = curGroupingIdx;
+    const curBar = bars[curBarIdx];
+    const curGrouping = curBar.groupings[curGroupingIdx];
+    const maxBeats = curGrouping.subdivision
+        ? curGrouping.beats * curGrouping.subdivision
+        : curGrouping.beats;
+    if (newBeat >= maxBeats) {
+        newBeat = 0;
+        newGroupingIdx += 1;
+        if (newGroupingIdx >= curBar.groupings.length) {
+            newGroupingIdx = 0;
+            newBarIdx += + 1;
+            if (newBarIdx > endingBarIdx) {
+                newBarIdx = startingBarIdx;
+            }
+        }
+    }
+    return {
+        newBeat,
+        newBarIdx,
+        newGroupingIdx
     };
 };
 
