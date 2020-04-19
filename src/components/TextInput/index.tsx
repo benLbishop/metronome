@@ -55,7 +55,7 @@ const TextInput: React.FC<Props> = (props: Props) => {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (tempValue === undefined || tempValue <= 0) {
+    if (tempValue === undefined || tempValue < 0) {
       return;
     }
     if (e.charCode === KeyCodes.ENTER) {
