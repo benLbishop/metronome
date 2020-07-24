@@ -9,7 +9,6 @@ import TextInput from '../TextInput';
 import { constants } from '../../config/constants';
 import SelectInput from '../SelectInput';
 
-import './LeftMenu.scss';
 import { RootState } from '../../reducers';
 import { songActions, handleAddBar, loadSong } from '../../actions/songActions';
 import { handleTogglePlay, handleUpdateStartingBarIdx, handleUpdateEndingBarIdx } from '../../actions/metronomeActions';
@@ -38,7 +37,7 @@ const getSongNames = (): string[] => {
 const LeftMenu: React.FC<Props> = (props) => {
 
   return (
-    <div id='leftMenu'>
+    <div className='flex flex-1 flex-col'>
       <SettingsBar
         tempo={props.tempo}
         playing={props.playing}
@@ -47,11 +46,11 @@ const LeftMenu: React.FC<Props> = (props) => {
         updateBPM={props.updateBPM}
         updateNoteValue={props.updateNoteValue}
       />
-      <div className='metronomeBarBounds'>
+      <div className='flex w-full h-20'>
         <TextInput value={props.startingBarIdx} updateValue={props.updateStartingBarIdx} />
         <TextInput value={props.endingBarIdx} updateValue={props.updateEndingBarIdx} />
       </div>
-      <div className='songLoader'>
+      <div className='w-full h-20'>
         <SelectInput
           selectedValue={props.curSongName ? props.curSongName : ''}
           values={['', ...getSongNames()]}

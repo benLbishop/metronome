@@ -26,7 +26,6 @@ const Grouping: React.FC<Props> = (props: Props) => {
     <div className={'grouping'}>
       <TimeSignature
         className={'grouping'}
-        textInputStyle={{ width: '80%', height: '20%', margin: '5% 0' }}
         noteValueStyle={{ height: '20%', width: '80%'}}
         beats={beats}
         noteValue={noteValue}

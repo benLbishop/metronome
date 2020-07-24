@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react';
-import './TextInput.scss';
 import { KeyCodes } from '../../types/htmlTypes';
 
 interface Props {
   value: number;
-  style?: React.CSSProperties;
+  className?: string;
   updateValue(newValue: number): void;
 }
 
@@ -12,6 +11,8 @@ interface Props {
 // and that isn't clear at all by the component name
 // TODO: try out Formik?
 const TextInput: React.FC<Props> = (props: Props) => {
+
+  const DEFAULT_CLASSNAME = 'w-full text-center text-xl rounded border border-gray-800';
 
   const inputRef: React.MutableRefObject<HTMLInputElement> = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -64,11 +65,12 @@ const TextInput: React.FC<Props> = (props: Props) => {
     }
   };
 
+  const className = props.className ? props.className : DEFAULT_CLASSNAME;
+
   return (
       <input
         ref={inputRef}
-        className='textInput'
-        style={props.style}
+        className={className}
         type='text'
         maxLength={3}
         value={getDisplayValue()}

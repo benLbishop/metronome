@@ -3571,6 +3571,10 @@ video {
   flex: 1 1 0%;
 }
 
+.flex-2 {
+  flex: 2 2 0%;
+}
+
 .flex-auto {
   flex: 1 1 auto;
 }
@@ -16150,6 +16154,10 @@ video {
 
   .sm\:flex-1 {
     flex: 1 1 0%;
+  }
+
+  .sm\:flex-2 {
+    flex: 2 2 0%;
   }
 
   .sm\:flex-auto {
@@ -28734,6 +28742,10 @@ video {
     flex: 1 1 0%;
   }
 
+  .md\:flex-2 {
+    flex: 2 2 0%;
+  }
+
   .md\:flex-auto {
     flex: 1 1 auto;
   }
@@ -41316,6 +41328,10 @@ video {
     flex: 1 1 0%;
   }
 
+  .lg\:flex-2 {
+    flex: 2 2 0%;
+  }
+
   .lg\:flex-auto {
     flex: 1 1 auto;
   }
@@ -53896,6 +53912,10 @@ video {
 
   .xl\:flex-1 {
     flex: 1 1 0%;
+  }
+
+  .xl\:flex-2 {
+    flex: 2 2 0%;
   }
 
   .xl\:flex-auto {
