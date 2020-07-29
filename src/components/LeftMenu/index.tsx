@@ -37,16 +37,15 @@ const getSongNames = (): string[] => {
 const LeftMenu: React.FC<Props> = (props) => {
 
   return (
-    <div className='flex flex-1 flex-col'>
+    <div className='h-1/5 flex flex-col items-center bg-gray-300'>
       <SettingsBar
         tempo={props.tempo}
         playing={props.playing}
         togglePlay={props.togglePlay}
-        addBar={props.addBar}
         updateBPM={props.updateBPM}
         updateNoteValue={props.updateNoteValue}
       />
-      <div className='flex w-full h-20'>
+      {/* <div className='flex w-full h-20'>
         <TextInput value={props.startingBarIdx} updateValue={props.updateStartingBarIdx} />
         <TextInput value={props.endingBarIdx} updateValue={props.updateEndingBarIdx} />
       </div>
@@ -56,7 +55,7 @@ const LeftMenu: React.FC<Props> = (props) => {
           values={['', ...getSongNames()]}
           updateValue={props.loadSong}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -8,10 +8,9 @@ import Bar from '../Bar';
 import { RootState } from '../../reducers';
 import { songActions, handleRemoveBar, handleCopyBar } from '../../actions/songActions';
 
-import './Metronome.scss';
-
 interface Props {
   bars: BarData[];
+  curBarIdx: number;
   removeBar(idx: number): void;
   copyBar(idx: number): void;
   updateBarNoteValue(idx: number, newValue: NoteValue): void;
@@ -29,6 +28,7 @@ const Metronome: React.FC<Props> = (props: Props) => {
       return <Bar
         key={`bar${bar.id}`}
         bar={bar}
+        isActive={idx === props.curBarIdx}
         remove={() => props.removeBar(idx)}
         copy={() => props.copyBar(idx)}
         updateNoteValue={(newVal: NoteValue) => props.updateBarNoteValue(idx, newVal)}
@@ -43,14 +43,15 @@ const Metronome: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <div id='metronome'>
+    <div className={'flex-1 flex flex-row flex-wrap bg-gray-500 items-center justify-center'}>
       {getBarsDisplay()}
     </div>
   );
 };
 
 const mapStateToProps = (state: RootState) => ({
-  bars: state.song.bars
+  bars: state.song.bars,
+  curBarIdx: state.metronome.curBarIdx
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, undefined, Action>) => {

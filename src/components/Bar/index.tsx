@@ -7,6 +7,7 @@ import SelectInput from '../SelectInput';
 
 interface Props {
   bar: BarData;
+  isActive: boolean;
   updateNoteValue(noteValue: NoteValue): void;
   updateGroupingBeats(idx: number, beats: number): void;
   updateGroupingNoteValue(idx: number, noteValue: NoteValue): void;
@@ -21,8 +22,11 @@ interface Props {
 const Bar: React.FC<Props> = (props: Props) => {
   const { noteValue, beats, groupings } = props.bar;
 
+  const backgroundColor: string = props.isActive ? 'bg-blue-700' : 'bg-blue-300';
+  const barStyle = `w-1/3 h-1/5 flex flex-col justify-even ${backgroundColor} rounded border-2 border-teal-900 mx-5`
+
   return (
-    <div className='w-1/3 h-40 flex flex-col justify-even bg-blue-700 rounded border-2 border-teal-900 mx-5'>
+    <div className={barStyle}>
       <div className='flex flex-2 flex-row items-stretch pb-2 border-b-2 border-b-red-600'>
         <div className='flex flex-1 flex-col items-center pr-2'>
           <p className='w-4/5 h-4 my-3 bg-white text-center'>{beats}</p>

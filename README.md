@@ -33,3 +33,6 @@ My inputs are still behaving strangely, even with the above fix. They're slightl
 
 ## Redux
 I'm iffy on where to do my updates for the current beat. I wanted to separate out the bars and tempo from the metronome since they're part of what I'll be using as songs. I wanted to keep the startingBarIdx and endingBarIdx in the metronome reducer, because they're more metronome settings than properties of the songs, but that means the automatic updating I want to do with the endingBarIdx no longer had access to bars.length in the reducer. To fix this, I made a wrapper function for updateEndingBarIdx and for add/removeBar, which use getState() to get the number of bars there are or will be. It doesn't feel the cleanest; I'd like to do something like listen for the addBar action in the metronome reducer, but there are no props in that function, so I'd have to clutter up addBar and pass the number of bars as a prop, which feels even worse than my current setup.
+
+## TODO
+add bars

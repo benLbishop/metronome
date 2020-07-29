@@ -1,16 +1,17 @@
 import React from 'react';
 
-import './SelectInput.scss';
-
 interface Props {
   selectedValue: string;
   values: string[];
+  className?: string;
   style?: React.CSSProperties;
   updateValue(newValue: string): void;
 }
 
 // TODO: lag on handleChange being called?
 const SelectInput: React.FC<Props> = (props) => {
+  const DEFAULT_CLASSNAME = 'w-full';
+
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newSelection = event.target.value;
     props.updateValue(newSelection);
@@ -22,9 +23,11 @@ const SelectInput: React.FC<Props> = (props) => {
     return options;
   };
 
+  const className = props.className ? props.className : DEFAULT_CLASSNAME;
+
   return (
     <select
-      className='selectInput'
+      className={className}
       style={props.style}
       value={props.selectedValue}
       onChange={handleChange}

@@ -16,7 +16,7 @@ interface Props {}
 
 const App: React.FC<Props> = (_props: Props) => {
   return (
-    <div className='w-screen h-screen flex flex-row'>
+    <div className='w-screen h-screen flex flex-col'>
       <LeftMenu />
       <Metronome />
     </div>

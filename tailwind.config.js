@@ -6,6 +6,9 @@ module.exports = {
         },
         flex: {
             '2': '2 2 0%'
+        },
+        height: {
+            '1/5': '20%'
         }
     },
   },

@@ -3,6 +3,8 @@ import { KeyCodes } from '../../types/htmlTypes';
 
 interface Props {
   value: number;
+  type?: string; // TODO: make enum
+  step?: number;
   className?: string;
   updateValue(newValue: number): void;
 }
@@ -66,13 +68,14 @@ const TextInput: React.FC<Props> = (props: Props) => {
   };
 
   const className = props.className ? props.className : DEFAULT_CLASSNAME;
-
+  const inputType = props.type ? props.type : 'number';
   return (
       <input
         ref={inputRef}
         className={className}
-        type='text'
+        type={inputType}
         maxLength={3}
+        step={props.step}
         value={getDisplayValue()}
         onChange={handleTextChange}
         onFocus={onFocus}
